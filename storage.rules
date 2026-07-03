@@ -1,0 +1,19 @@
+rules_version = '2';
+
+// Firebase Storage rules for uploaded journal images.
+//
+// Uploads happen server-side through the Admin SDK (which bypasses rules);
+// images are served through download-token URLs generated at upload time.
+// Public read on uploads/ additionally lets tokenless/proxied access work
+// (e.g. the Next.js image optimizer fetching the original).
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /uploads/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

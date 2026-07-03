@@ -1,0 +1,28 @@
+# Dependencies
+/node_modules
+
+# Next.js build output
+/.next
+/out
+
+# Production
+/build
+
+# Environment files (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Firebase service account keys
+*service-account*.json
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Misc
+.DS_Store
+npm-debug.log*
