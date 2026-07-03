@@ -92,7 +92,7 @@ export default function HomePage() {
       {appSections.map((section) => (
         <section key={section.label} aria-label={section.label}>
           <DharmaDivider />
-          <p className="section-label">{section.label}</p>
+          <h2 className="section-label">{section.label}</h2>
           <div className="grid">
             {section.apps.map((app) => (
               <AppCard key={app.title} app={app} />
@@ -104,7 +104,7 @@ export default function HomePage() {
       <div className="experiments-wrapper">
         <details>
           <summary className="experiments-toggle">
-            <span className="exp-chevron">▶</span>
+            <span className="exp-chevron" aria-hidden="true">▶</span>
             <span className="exp-label">Experiments</span>
           </summary>
           <div className="experiments-grid">

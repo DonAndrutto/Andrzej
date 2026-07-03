@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminSession } from "@/lib/auth/session";
+import { requireAdminSessionOrResponse } from "@/lib/auth/session";
+import { errorResponse } from "@/lib/http-error";
 import { getPostRepository } from "@/lib/posts/repository";
 import { revalidatePostSurfaces } from "@/lib/posts/revalidate";
 import { validatePostInput } from "@/lib/posts/validate";
@@ -8,11 +9,8 @@ export const runtime = "nodejs";
 
 /** POST /api/admin/posts — create a post. */
 export async function POST(request: NextRequest) {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const auth = await requireAdminSessionOrResponse();
+  if (auth instanceof NextResponse) return auth;
 
   let body: unknown;
   try {
@@ -35,12 +33,6 @@ export async function POST(request: NextRequest) {
     revalidatePostSurfaces(post);
     return NextResponse.json({ post }, { status: 201 });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to create the post.";
-    const conflict = message.includes("already exists");
-    return NextResponse.json(
-      { error: message },
-      { status: conflict ? 409 : 500 },
-    );
+    return errorResponse(error, "Failed to create the post.");
   }
 }

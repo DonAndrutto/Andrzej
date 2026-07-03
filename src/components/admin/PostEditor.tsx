@@ -434,7 +434,7 @@ export function PostEditor({
 
       <aside className="editor-side">
         <div className="admin-panel">
-          <p className="panel-label">Publish</p>
+          <h2 className="panel-label">Publish</h2>
           <p className="field-hint" style={{ marginBottom: "0.9rem" }}>
             {savedStatus === "published" && "This post is live."}
             {savedStatus === "draft" && "This post is a draft — only you can see it."}
@@ -488,7 +488,7 @@ export function PostEditor({
         </div>
 
         <div className="admin-panel featured-widget">
-          <p className="panel-label">Featured image</p>
+          <h2 className="panel-label">Featured image</h2>
           {featuredImage ? (
             <>
               {/* Plain <img>: the public pages use next/image; here we just
@@ -559,7 +559,7 @@ export function PostEditor({
 
         {post && (
           <div className="admin-panel">
-            <p className="panel-label">Details</p>
+            <h2 className="panel-label">Details</h2>
             <p className="field-hint">Created {formatDate(post.createdAt)}</p>
             <p className="field-hint">Updated {formatDate(post.updatedAt)}</p>
             {post.publishedAt && (

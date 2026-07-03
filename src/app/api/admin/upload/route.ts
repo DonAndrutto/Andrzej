@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminSession } from "@/lib/auth/session";
+import { requireAdminSessionOrResponse } from "@/lib/auth/session";
+import { errorResponse } from "@/lib/http-error";
 import {
   ALLOWED_IMAGE_TYPES,
   getImageStorage,
@@ -15,11 +16,8 @@ export const runtime = "nodejs";
  * server-side).
  */
 export async function POST(request: NextRequest) {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const auth = await requireAdminSessionOrResponse();
+  if (auth instanceof NextResponse) return auth;
 
   let form: FormData;
   try {
@@ -77,12 +75,6 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({ image: { ...stored, blurDataURL } }, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Failed to store the image.",
-      },
-      { status: 500 },
-    );
+    return errorResponse(error, "Failed to store the image.");
   }
 }

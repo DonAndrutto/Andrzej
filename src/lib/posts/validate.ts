@@ -64,10 +64,12 @@ export function validatePostInput(body: unknown): ValidationResult {
     if (typeof img.url === "string" && isSafeImageUrl(img.url)) {
       featuredImage = {
         url: img.url,
-        alt: typeof img.alt === "string" ? img.alt.trim() : title,
-        width: typeof img.width === "number" ? img.width : undefined,
-        height: typeof img.height === "number" ? img.height : undefined,
-        blurDataURL: isBlurDataUrl(img.blurDataURL) ? img.blurDataURL : undefined,
+        alt: (typeof img.alt === "string" ? img.alt.trim() : "") || title,
+        // Omit rather than set to `undefined`: gray-matter's YAML serializer
+        // throws on any object property whose value is `undefined`.
+        ...(typeof img.width === "number" ? { width: img.width } : {}),
+        ...(typeof img.height === "number" ? { height: img.height } : {}),
+        ...(isBlurDataUrl(img.blurDataURL) ? { blurDataURL: img.blurDataURL } : {}),
       };
     } else {
       errors.push("Featured image URL must be site-relative or https.");

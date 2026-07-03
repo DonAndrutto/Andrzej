@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { getAdminFirestore } from "@/lib/firebase/admin";
+import { HttpError } from "@/lib/http-error";
 import type { PostRepository } from "./repository";
 import { applyQuery, normalizePost, sortPosts, taxonomiesOf } from "./query";
 import type {
@@ -80,7 +81,7 @@ export class FirestorePostRepository implements PostRepository {
     const db = await getAdminFirestore();
     const ref = db.collection(COLLECTION).doc(input.slug);
     if ((await ref.get()).exists) {
-      throw new Error(`A post with slug "${input.slug}" already exists.`);
+      throw new HttpError(409, `A post with slug "${input.slug}" already exists.`);
     }
     const now = new Date().toISOString();
     await ref.set(this.toDocument(input, { createdAt: now, updatedAt: now }));
@@ -102,7 +103,7 @@ export class FirestorePostRepository implements PostRepository {
       // Slug is the document id, so a rename is a transactional move.
       const targetRef = db.collection(COLLECTION).doc(input.slug);
       if ((await targetRef.get()).exists) {
-        throw new Error(`A post with slug "${input.slug}" already exists.`);
+        throw new HttpError(409, `A post with slug "${input.slug}" already exists.`);
       }
       const batch = db.batch();
       batch.set(targetRef, document);

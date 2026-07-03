@@ -105,7 +105,7 @@ export default async function PostPage({ params }: Props) {
       {related.length > 0 && (
         <section className="related-section" aria-label="Related posts">
           <DharmaDivider />
-          <p className="section-label">Further Reading</p>
+          <h2 className="section-label">Further Reading</h2>
           <div className="post-grid">
             {related.map((relatedPost) => (
               <PostCard key={relatedPost.slug} post={relatedPost} />

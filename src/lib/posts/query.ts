@@ -36,14 +36,20 @@ export function normalizePost(
     rawImage && typeof rawImage === "object" && typeof rawImage.url === "string"
       ? {
           url: rawImage.url,
-          alt: str(rawImage.alt, str(data.title)),
-          width: typeof rawImage.width === "number" ? rawImage.width : undefined,
-          height:
-            typeof rawImage.height === "number" ? rawImage.height : undefined,
-          blurDataURL:
-            typeof rawImage.blurDataURL === "string"
-              ? rawImage.blurDataURL
-              : undefined,
+          alt:
+            (typeof rawImage.alt === "string" ? rawImage.alt.trim() : "") ||
+            str(data.title),
+          // Omit rather than set to `undefined`: this Post can flow back into
+          // a write (e.g. the publish/unpublish PATCH route re-saves the
+          // existing featuredImage as-is), and gray-matter's YAML serializer
+          // throws on any object property whose value is `undefined`.
+          ...(typeof rawImage.width === "number" ? { width: rawImage.width } : {}),
+          ...(typeof rawImage.height === "number"
+            ? { height: rawImage.height }
+            : {}),
+          ...(typeof rawImage.blurDataURL === "string"
+            ? { blurDataURL: rawImage.blurDataURL }
+            : {}),
         }
       : null;
 

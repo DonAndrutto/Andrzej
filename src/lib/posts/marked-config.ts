@@ -20,21 +20,41 @@ export function createConfiguredMarked(): Marked {
       // Inline images are lazy; the featured image (next/image, priority)
       // is the LCP candidate, not these.
       image({ href, title, text }: Tokens.Image) {
+        if (!href || !isAllowedUrl(href)) return escapeAttr(text ?? "");
         const titleAttr = title ? ` title="${escapeAttr(title)}"` : "";
-        return `<img src="${escapeAttr(href ?? "")}" alt="${escapeAttr(text ?? "")}"${titleAttr} loading="lazy" decoding="async" />`;
+        return `<img src="${escapeAttr(href)}" alt="${escapeAttr(text ?? "")}"${titleAttr} loading="lazy" decoding="async" />`;
       },
       // External links open in a new tab without leaking the opener.
       link({ href, title, tokens }: Tokens.Link) {
         const text = this.parser.parseInline(tokens);
+        if (!href || !isAllowedUrl(href)) return text;
         const titleAttr = title ? ` title="${escapeAttr(title)}"` : "";
-        const external = /^https?:\/\//.test(href ?? "");
+        const external = /^https?:\/\//.test(href);
         const rel = external ? ` target="_blank" rel="noopener noreferrer"` : "";
-        return `<a href="${escapeAttr(href ?? "")}"${titleAttr}${rel}>${text}</a>`;
+        return `<a href="${escapeAttr(href)}"${titleAttr}${rel}>${text}</a>`;
       },
     },
   });
 
   return instance;
+}
+
+const ALLOWED_URL_SCHEMES = new Set(["http:", "https:", "mailto:"]);
+
+/**
+ * Rejects `javascript:`/`data:` URIs and protocol-relative ("//host") links
+ * at the renderer level, so the client-side preview (which skips the
+ * server's sanitize-html pass) can't execute script from pasted or typed
+ * markdown. Relative paths (e.g. "/uploads/x.png", "#section") resolve
+ * against a placeholder base and are always allowed.
+ */
+function isAllowedUrl(url: string): boolean {
+  if (url.startsWith("//")) return false;
+  try {
+    return ALLOWED_URL_SCHEMES.has(new URL(url, "https://relative.invalid").protocol);
+  } catch {
+    return false;
+  }
 }
 
 function escapeAttr(value: string): string {

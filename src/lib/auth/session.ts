@@ -1,7 +1,9 @@
 import "server-only";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { getAdminAuth, isFirebaseAdminConfigured } from "@/lib/firebase/admin";
+import { errorResponse, HttpError } from "@/lib/http-error";
 
 /**
  * Admin session management.
@@ -123,13 +125,26 @@ export async function getAdminSession(): Promise<AdminSession | null> {
   }
 }
 
-/** Guard for mutation routes: session or a 401-shaped error. */
+/** Guard for mutation routes: session or a typed 401 error. */
 export async function requireAdminSession(): Promise<AdminSession> {
   const session = await getAdminSession();
   if (!session) {
-    const error = new Error("Not authenticated.") as Error & { status: number };
-    error.status = 401;
-    throw error;
+    throw new HttpError(401, "Not authenticated.");
   }
   return session;
+}
+
+/**
+ * For API routes: the session, or a ready-to-return 401 response. Route
+ * handlers use this instead of their own try/catch around
+ * `requireAdminSession` — see `errorResponse` in `@/lib/http-error`.
+ */
+export async function requireAdminSessionOrResponse(): Promise<
+  AdminSession | NextResponse
+> {
+  try {
+    return await requireAdminSession();
+  } catch (error) {
+    return errorResponse(error, "Not authenticated.");
+  }
 }

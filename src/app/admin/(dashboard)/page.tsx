@@ -58,7 +58,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="admin-panel">
-        <p className="panel-label">Recent activity</p>
+        <h2 className="panel-label">Recent activity</h2>
         {recent.length === 0 ? (
           <p className="field-hint" style={{ fontStyle: "italic" }}>
             No posts yet — start with your first one.
@@ -96,7 +96,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="admin-panel">
-        <p className="panel-label">System</p>
+        <h2 className="panel-label">System</h2>
         <div className="admin-table-wrap">
           <table className="admin-table">
             <tbody>

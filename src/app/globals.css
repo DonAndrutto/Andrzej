@@ -18,7 +18,7 @@
   --gold: #a87a2a;
   --gold-soft: #c9a96a;
   --muted: #6b5e52;
-  --muted-soft: #9d8d7d;
+  --muted-soft: #7a6b5d;
   --card-bg: #fdfaf4;
   --border: #ddd2c2;
   --border-soft: #ebe2d2;
@@ -659,7 +659,11 @@ details[open] .experiments-toggle .exp-chevron {
   font-size: 1rem;
   font-weight: 300;
   color: var(--ink);
-  outline: none;
+}
+
+.search-form input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
 }
 
 .search-form input::placeholder {

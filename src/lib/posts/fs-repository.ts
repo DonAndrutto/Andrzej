@@ -1,6 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { HttpError } from "@/lib/http-error";
 import type { PostRepository } from "./repository";
 import { applyQuery, normalizePost, sortPosts, taxonomiesOf } from "./query";
 import type {
@@ -91,7 +92,7 @@ export class FsPostRepository implements PostRepository {
 
   async createPost(input: PostInput): Promise<Post> {
     if (await this.getPost(input.slug)) {
-      throw new Error(`A post with slug "${input.slug}" already exists.`);
+      throw new HttpError(409, `A post with slug "${input.slug}" already exists.`);
     }
     const now = new Date().toISOString();
     return this.write(input, { createdAt: now, updatedAt: now });
@@ -101,7 +102,7 @@ export class FsPostRepository implements PostRepository {
     const existing = await this.getPost(slug);
     if (!existing) throw new Error(`Post "${slug}" not found.`);
     if (input.slug !== slug && (await this.getPost(input.slug))) {
-      throw new Error(`A post with slug "${input.slug}" already exists.`);
+      throw new HttpError(409, `A post with slug "${input.slug}" already exists.`);
     }
 
     const post = await this.write(input, {

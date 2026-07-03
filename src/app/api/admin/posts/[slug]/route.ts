@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdminSession } from "@/lib/auth/session";
+import { requireAdminSessionOrResponse } from "@/lib/auth/session";
+import { errorResponse } from "@/lib/http-error";
 import { getPostRepository } from "@/lib/posts/repository";
 import { revalidatePostSurfaces } from "@/lib/posts/revalidate";
 import { validatePostInput } from "@/lib/posts/validate";
@@ -12,11 +13,8 @@ interface Context {
 
 /** PUT /api/admin/posts/[slug] — update (the payload may rename the slug). */
 export async function PUT(request: NextRequest, context: Context) {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const auth = await requireAdminSessionOrResponse();
+  if (auth instanceof NextResponse) return auth;
   const { slug } = await context.params;
 
   let body: unknown;
@@ -46,23 +44,14 @@ export async function PUT(request: NextRequest, context: Context) {
     revalidatePostSurfaces(post, previous);
     return NextResponse.json({ post });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to update the post.";
-    const conflict = message.includes("already exists");
-    return NextResponse.json(
-      { error: message },
-      { status: conflict ? 409 : 500 },
-    );
+    return errorResponse(error, "Failed to update the post.");
   }
 }
 
 /** PATCH /api/admin/posts/[slug] — quick status change: { status: "draft" | "published" }. */
 export async function PATCH(request: NextRequest, context: Context) {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const auth = await requireAdminSessionOrResponse();
+  if (auth instanceof NextResponse) return auth;
   const { slug } = await context.params;
 
   let body: { status?: unknown };
@@ -98,23 +87,14 @@ export async function PATCH(request: NextRequest, context: Context) {
     revalidatePostSurfaces(post);
     return NextResponse.json({ post });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Failed to update the post.",
-      },
-      { status: 500 },
-    );
+    return errorResponse(error, "Failed to update the post.");
   }
 }
 
 /** DELETE /api/admin/posts/[slug] */
 export async function DELETE(_request: NextRequest, context: Context) {
-  try {
-    await requireAdminSession();
-  } catch {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const auth = await requireAdminSessionOrResponse();
+  if (auth instanceof NextResponse) return auth;
   const { slug } = await context.params;
 
   const repo = await getPostRepository();
@@ -128,12 +108,6 @@ export async function DELETE(_request: NextRequest, context: Context) {
     revalidatePostSurfaces(post);
     return NextResponse.json({ ok: true });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error ? error.message : "Failed to delete the post.",
-      },
-      { status: 500 },
-    );
+    return errorResponse(error, "Failed to delete the post.");
   }
 }
