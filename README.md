@@ -1,12 +1,58 @@
-Andrzej R. Rybszleger
-Translator of Tibetan Buddhist texts into English and Polish for over 20 years. Working across liturgical texts, study aids, and commentaries under the direction of H.E. Gangteng Tulku Rinpoche, published by Yeshe Khorlo.
-🌐 donandrutto.github.io
+# arybszleger.com
 
-Apps
-AppCategoryVajrachedikāSutra readerKGK NgondroNgöndroKurukulléSādhanaMünsel DrönmeSādhanaLama GongduStudy aidConfession CompanionPrayersYönten Dzö — Sabche ExplorerStudy aid
+Website of **Andrzej R. Rybszleger** — translator of Tibetan Buddhist texts
+into English and Polish for over 20 years, working across liturgical texts,
+study aids and commentaries under the direction of H.E. Gangteng Tulku
+Rinpoche, published by Yeshe Khorlo. All apps are offered freely as a service
+to practitioners.
 
-All apps offered freely as a service to practitioners.
-<!---
-DonAndrutto/DonAndrutto is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+The site is a Next.js (App Router) application: the original app directory as
+the home page, plus a fully SEO-optimised journal (blog) with a built-in
+content management system. See [ARCHITECTURE.md](./ARCHITECTURE.md) for how
+it fits together and how the Firebase/Vercel migration works.
+
+## Develop
+
+```bash
+npm install
+npm run dev            # http://localhost:3000
+```
+
+To use the admin dashboard locally without Firebase, create `.env.local`:
+
+```bash
+ADMIN_DEV_PASSWORD=pick-a-long-random-string
+```
+
+then sign in at [`/admin`](http://localhost:3000/admin). Posts are saved to
+`content/posts/*.md` and images to `public/uploads/` — commit them with git
+to publish (a git-based CMS). With Firebase configured (see
+[`.env.example`](./.env.example)) the same dashboard runs on Firestore,
+Firebase Storage and Firebase Auth instead.
+
+## Commands
+
+| Command             | Purpose                       |
+|---------------------|-------------------------------|
+| `npm run dev`       | Development server            |
+| `npm run build`     | Production build              |
+| `npm start`         | Serve the production build    |
+| `npm run typecheck` | TypeScript check              |
+
+## Layout
+
+```
+content/posts/    journal posts (markdown + frontmatter)
+public/uploads/   images uploaded through the CMS (local backend)
+src/app/          routes: home, /blog, /admin, feeds, sitemap, robots
+src/components/   site, blog and admin components
+src/lib/          domain: posts, auth, storage, firebase, seo
+index.html        legacy static home page — still served by GitHub Pages
+```
+
+`index.html`, `CNAME` and `docs/` keep the existing GitHub Pages deployment
+alive; remove them once the domain points at Vercel.
+
+## Contact
+
+[translation@arybszleger.com](mailto:translation@arybszleger.com)
