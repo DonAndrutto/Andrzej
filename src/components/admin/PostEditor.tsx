@@ -495,6 +495,11 @@ export function PostEditor({
 
         <div className="admin-panel featured-widget">
           <h2 className="panel-label">Featured image</h2>
+          <p className="field-hint" style={{ marginBottom: "0.9rem" }}>
+            Best size <strong>1600 × 900 px</strong> (16:9 ratio). Cards crop to
+            16:9, so keep the subject centred. JPEG or WebP, ideally under
+            ~400&nbsp;KB (8&nbsp;MB max).
+          </p>
           {featuredImage ? (
             <>
               {/* Plain <img>: the public pages use next/image; here we just
