@@ -210,7 +210,13 @@ export function PostEditor({
     setNotice(null);
     try {
       const image = await uploadImage(file);
-      insertBlock(`![${file.name.replace(/\.[a-z0-9]+$/i, "")}](${image.url})`);
+      const label = file.name.replace(/\.[a-z0-9]+$/i, "");
+      insertBlock(`![${label}](${image.url})`);
+      // If the post has no featured image yet, use this first inline image
+      // as one too — otherwise it shows in the body but not on the journal
+      // listing cards, which only ever read `featuredImage`.
+      setFeaturedImage((current) => current ?? { ...image, alt: label });
+      setDirty(true);
     } catch (error) {
       setNotice({
         kind: "error",
