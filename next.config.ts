@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
     "/**": ["./content/posts/**/*"],
   },
   images: {
+    // Serve images directly instead of through Vercel's Image Optimization.
+    // On the Vercel Hobby plan the optimizer is quota-limited and, once the
+    // allowance is spent, every /_next/image request 402s
+    // (OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED) — which renders every
+    // next/image (card thumbnails, featured images) as a broken image while
+    // plain <img> body images keep working. Bypassing the optimizer makes
+    // <Image> emit the original source URL, so images load straight from
+    // Firebase Storage (long-cached, CDN-served) with no optimizer in the
+    // path. Blur placeholders, sizing and layout are unaffected.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       // Firebase Storage download URLs (used once Firebase is configured).
