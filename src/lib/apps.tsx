@@ -58,7 +58,7 @@ export const appSections: AppSection[] = [
     ],
   },
   {
-    label: "Prayers",
+    label: "Prayers and Instructions",
     apps: [
       {
         tag: "Prayers",
@@ -66,6 +66,13 @@ export const appSections: AppSection[] = [
         description:
           "Tibetan, English and Polish renderings of three popular confession texts within the Tibetan tradition: the Vajrayāna Downfall Confession, the Bodhisattva's Confession, and Yeshe Kuchok — the Ultimate Confession.",
         href: "https://studio--confession-companion-whlq9.us-central1.hosted.app",
+      },
+      {
+        tag: "Prayers and Instructions",
+        title: "Bardo OS",
+        description:
+          "Bardo OS (Bardo Operating System) is a free, offline-ready app of the Bardo Thödrol Chenmo's essential prayers and instructions, for the bedside and for those preparing to die. The tradition promises liberation by hearing alone. It's a growing resource — more texts and translations are on the way. Add it to your home screen, and let these words become familiar before they are needed.",
+        href: "https://bardo-os.arybszleger.com/",
       },
     ],
   },
