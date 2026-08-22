@@ -10,11 +10,11 @@ while remaining fully functional today with zero external services.
 │  Next.js App Router (src/app)                                   │
 │                                                                 │
 │  Public (static / ISR)          Admin (dynamic, session-gated)  │
-│  /            home             /admin           dashboard      │
+│  /            home (EN)        /admin           dashboard      │
 │  /blog …      journal          /admin/posts …   CMS editor     │
-│  /feed.xml    RSS              /admin/preview   draft preview  │
-│  /sitemap.xml /robots.txt      /api/admin/*     mutations      │
-│                                /api/auth/session sessions      │
+│  /pl, /pl/… same, in Polish    /admin/preview   draft preview  │
+│  /feed.xml    RSS              /api/admin/*     mutations      │
+│  /sitemap.xml /robots.txt      /api/auth/session sessions      │
 └───────────────┬─────────────────────────┬───────────────────────┘
                 │                         │
         PostRepository            ImageStorage · AdminSession
@@ -58,6 +58,49 @@ Firestore is a data copy plus environment variables, not a rewrite.
    the repository/storage/auth factories switch to Firestore, Firebase
    Storage and Firebase Auth at boot. Publishing revalidates the static
    pages instantly (`revalidatePath`).
+
+## Localisation (English · Polish)
+
+English is the default and keeps every URL it has always had; Polish is the
+same site one segment deeper. Nothing sniffs `Accept-Language` — the page
+always opens in English, and the flag in the top-right corner (next to
+*Journal* / *Wpisy*) is the only way in and out of Polish. That choice is
+what keeps every public page statically rendered: reading the request in the
+root layout would opt the whole site out of static generation.
+
+| English            | Polish                | Rendered by                       |
+|--------------------|-----------------------|-----------------------------------|
+| `/`                | `/pl`                 | `HomeView`                        |
+| `/blog`            | `/pl/blog`            | `JournalIndexView`                |
+| `/blog/[slug]`     | `/pl/blog/[slug]`     | `PostView`                        |
+| `/blog/category/…` | `/pl/blog/category/…` | `CategoryView`                    |
+| `/blog/tag/…`      | `/pl/blog/tag/…`      | `TagView`                         |
+| `/blog/page/[n]`   | `/pl/blog/page/[n]`   | `JournalPageView`                 |
+| `/blog/search`     | `/pl/blog/search`     | `SearchView`                      |
+
+- **One implementation per page.** The views in `src/components/pages/` take
+  a `Locale` and do the work; the route files under `src/app` only pick a
+  locale and pass their params, so the two editions cannot drift apart.
+- **Strings** live in `src/lib/i18n/dictionary.tsx` (one `Dictionary` per
+  locale, typed so a missing translation is a build error), the app directory
+  in `src/lib/apps.tsx` (both languages linking to one shared table of URLs),
+  and `src/lib/i18n/config.ts` owns the path arithmetic (`localePath`).
+- **Post bodies are served as written** — the journal's *chrome* is
+  translated (titles, dates, reading time, categories, pagination), not the
+  authored English text. Category display names are translated by slug in the
+  dictionary; unknown categories fall back to the authored name.
+- **Polish agreement** is real agreement: counts run through
+  `Intl.PluralRules` (`1 wpis`, `3 wpisy`, `7 wpisów`) and dates through
+  `pl-PL` (`4 maja 2026`).
+- **SEO**: every page emits `canonical` plus `hreflang` alternates for both
+  editions (`x-default` → English), `og:locale` per edition, JSON-LD with the
+  right `inLanguage`/`url`, and the sitemap lists both with `xhtml:link`
+  alternates.
+- **Language attribute**: the root layout owns `<html lang="en">`; the Polish
+  subtree declares `lang="pl"` on the element wrapping it
+  (`src/app/pl/layout.tsx`). A per-edition `<html>` would mean two root
+  layouts and moving every existing route into a group — the trade the
+  wrapper avoids.
 
 ## Rendering & performance
 
@@ -113,5 +156,6 @@ root, so the current GitHub Pages deployment keeps serving until DNS moves
 to Vercel. `.nojekyll` stops Pages from processing the new directories. The
 Next.js home page (`src/app/page.tsx`) is a faithful port of `index.html` —
 same markup, tokens, animations and content (now data-driven from
-`src/lib/apps.tsx`). Once Vercel serves `arybszleger.com`, delete
+`src/lib/apps.tsx`; `index.html` has no Polish edition — the flag and `/pl`
+exist only in the Next.js app). Once Vercel serves `arybszleger.com`, delete
 `index.html`, `CNAME` and `docs/`.

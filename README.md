@@ -11,6 +11,15 @@ the home page, plus a fully SEO-optimised journal (blog) with a built-in
 content management system. See [ARCHITECTURE.md](./ARCHITECTURE.md) for how
 it fits together and how the Firebase/Vercel migration works.
 
+The site is published in **English and Polish**. It always opens in English;
+the flag in the top-right corner (beside *Journal* / *Wpisy*) switches to the
+Polish edition, which lives under `/pl` — `/blog/some-post` ↔
+`/pl/blog/some-post`, page for page. Translations are edited in
+[`src/lib/i18n/dictionary.tsx`](./src/lib/i18n/dictionary.tsx) (site and
+journal wording, including Polish category names) and
+[`src/lib/apps.tsx`](./src/lib/apps.tsx) (the app cards). Journal posts
+themselves are shown as written — only the frame around them is translated.
+
 ## Develop
 
 ```bash
@@ -44,9 +53,10 @@ Firebase Storage and Firebase Auth instead.
 ```
 content/posts/    journal posts (markdown + frontmatter)
 public/uploads/   images uploaded through the CMS (local backend)
-src/app/          routes: home, /blog, /admin, feeds, sitemap, robots
-src/components/   site, blog and admin components
-src/lib/          domain: posts, auth, storage, firebase, seo
+src/app/          routes: home, /blog, /pl (Polish), /admin, feeds, sitemap
+src/components/   site, blog and admin components + pages/ (one view per
+                  page, rendered by both language editions)
+src/lib/          domain: posts, auth, storage, firebase, seo, i18n
 index.html        legacy static home page — still served by GitHub Pages
 ```
 

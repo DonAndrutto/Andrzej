@@ -66,14 +66,15 @@ body::after {
   user-select: none;
 }
 
-/* ── Corner navigation (Home ↔ Journal) ── */
+/* ── Corner navigation (Home ↔ Journal, and the language flag) ── */
 .corner-nav {
   position: absolute;
   top: 1.6rem;
   right: 2rem;
   z-index: 2;
   display: flex;
-  gap: 1.6rem;
+  align-items: center;
+  gap: 1.15rem;
 }
 
 .corner-nav a {
@@ -88,6 +89,20 @@ body::after {
 }
 
 .corner-nav a:hover { color: var(--accent); }
+
+/* The language flag: an ornament, not a button — quiet until you reach it. */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  opacity: 0.55;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.lang-switch:hover,
+.lang-switch:focus-visible { opacity: 1; transform: translateY(-1px); }
+
+.lang-switch svg { display: block; }
 
 /* ── Header ── */
 header.site-header {

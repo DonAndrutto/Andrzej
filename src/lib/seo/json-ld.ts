@@ -1,24 +1,37 @@
+import { defaultLocale, localePath, type Locale } from "@/lib/i18n/config";
+import { categoryName, getDictionary } from "@/lib/i18n/dictionary";
 import type { Post } from "@/lib/posts/types";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
 /**
  * Structured-data builders (schema.org JSON-LD). Each returns a plain object;
  * pages serialise them into a single <script type="application/ld+json">.
+ *
+ * Every builder takes the locale of the page emitting it, so the `url`,
+ * `@id` and `inLanguage` values describe the language edition the reader is
+ * actually on — the one thing search engines need to keep the two editions
+ * apart rather than treating them as duplicates.
  */
 
-export function websiteJsonLd() {
+/** Absolute URL of a site-relative path within a language edition. */
+function localeUrl(path: string, locale: Locale): string {
+  return absoluteUrl(localePath(path, locale));
+}
+
+export function websiteJsonLd(locale: Locale = defaultLocale) {
+  const t = getDictionary(locale);
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: siteConfig.name,
-    url: siteConfig.url,
-    description: siteConfig.description,
-    inLanguage: siteConfig.locale,
+    url: localeUrl("/", locale),
+    description: t.site.description,
+    inLanguage: t.htmlLang,
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${siteConfig.url}/blog/search?q={search_term_string}`,
+        urlTemplate: `${localeUrl("/blog/search", locale)}?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -39,32 +52,39 @@ export function personJsonLd() {
   };
 }
 
-export function blogJsonLd() {
+/** `@id` of the Blog node for a language edition. */
+function blogId(locale: Locale): string {
+  return `${localeUrl("/blog", locale)}#blog`;
+}
+
+export function blogJsonLd(locale: Locale = defaultLocale) {
+  const t = getDictionary(locale);
   return {
     "@context": "https://schema.org",
     "@type": "Blog",
-    "@id": `${siteConfig.url}/blog#blog`,
-    name: `${siteConfig.author} — ${siteConfig.blogTitle}`,
-    url: absoluteUrl("/blog"),
-    description: siteConfig.blogDescription,
-    inLanguage: siteConfig.locale,
+    "@id": blogId(locale),
+    name: `${siteConfig.author} — ${t.journal.name}`,
+    url: localeUrl("/blog", locale),
+    description: t.journal.description,
+    inLanguage: t.htmlLang,
     author: { "@id": `${siteConfig.url}/#person` },
   };
 }
 
-export function articleJsonLd(post: Post) {
+export function articleJsonLd(post: Post, locale: Locale = defaultLocale) {
+  const url = localeUrl(`/blog/${post.slug}`, locale);
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "@id": `${absoluteUrl(`/blog/${post.slug}`)}#article`,
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
+    "@id": `${url}#article`,
+    mainEntityOfPage: url,
     headline: post.title,
     description: post.excerpt,
-    url: absoluteUrl(`/blog/${post.slug}`),
+    url,
     datePublished: post.publishedAt ?? post.createdAt,
     dateModified: post.updatedAt,
-    inLanguage: siteConfig.locale,
-    isPartOf: { "@id": `${siteConfig.url}/blog#blog` },
+    inLanguage: getDictionary(locale).htmlLang,
+    isPartOf: { "@id": blogId(locale) },
     author: {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
@@ -92,7 +112,7 @@ export function articleJsonLd(post: Post) {
           },
         }
       : {}),
-    articleSection: post.category,
+    articleSection: categoryName(post.category, locale),
     keywords: post.tags.join(", "),
     timeRequired: `PT${post.readingTimeMinutes}M`,
   };
@@ -100,11 +120,14 @@ export function articleJsonLd(post: Post) {
 
 export interface BreadcrumbItem {
   name: string;
-  /** Site-relative path; omitted for the current (last) item. */
+  /** Site-relative path, unprefixed English form; omitted for the current item. */
   path?: string;
 }
 
-export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
+export function breadcrumbJsonLd(
+  items: BreadcrumbItem[],
+  locale: Locale = defaultLocale,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -112,7 +135,7 @@ export function breadcrumbJsonLd(items: BreadcrumbItem[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      ...(item.path ? { item: absoluteUrl(item.path) } : {}),
+      ...(item.path ? { item: localeUrl(item.path, locale) } : {}),
     })),
   };
 }

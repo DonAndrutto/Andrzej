@@ -15,10 +15,10 @@ export const generateStaticParams = postStaticParams;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  return postMetadata("en", slug);
+  return postMetadata("pl", slug);
 }
 
-export default async function PostPage({ params }: Props) {
+export default async function PolishPostPage({ params }: Props) {
   const { slug } = await params;
-  return <PostView locale="en" slug={slug} />;
+  return <PostView locale="pl" slug={slug} />;
 }

@@ -2,14 +2,20 @@ import type { ReactNode } from "react";
 import { JournalToolbar } from "@/components/blog/JournalToolbar";
 import { Pagination } from "@/components/blog/Pagination";
 import { PostCard } from "@/components/blog/PostCard";
+import { CornerNav } from "@/components/site/CornerNav";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 import type { Post, Taxonomy } from "@/lib/posts/types";
 
 /**
  * Shared shell for every journal listing surface (index, pagination pages,
- * category, tag and search results) so they stay visually identical.
+ * category, tag and search results) so they stay visually identical — in
+ * both languages.
  */
 export function JournalListing({
-  mark = "Tibetan Buddhist Translations",
+  locale,
+  path,
+  mark,
   title,
   intro,
   posts,
@@ -17,8 +23,11 @@ export function JournalListing({
   activeCategory,
   query,
   pagination,
-  emptyMessage = "Nothing here yet — new notes are on their way.",
+  emptyMessage,
 }: {
+  locale: Locale;
+  /** This page's site-relative path in its unprefixed English form. */
+  path: string;
   mark?: string;
   title: ReactNode;
   intro?: ReactNode;
@@ -29,10 +38,13 @@ export function JournalListing({
   pagination?: { basePath: string; page: number; totalPages: number };
   emptyMessage?: string;
 }) {
+  const t = getDictionary(locale);
   return (
     <>
+      <CornerNav current="journal" locale={locale} path={path} />
+
       <header className="journal-header">
-        <p className="dharma-mark">{mark}</p>
+        <p className="dharma-mark">{mark ?? t.site.mark}</p>
         <h1 className="journal-title">{title}</h1>
         <div className="title-rule" aria-hidden="true">
           <span className="diamond"></span>
@@ -41,6 +53,7 @@ export function JournalListing({
       </header>
 
       <JournalToolbar
+        locale={locale}
         categories={categories}
         activeCategory={activeCategory}
         query={query}
@@ -49,14 +62,14 @@ export function JournalListing({
       {posts.length > 0 ? (
         <div className="post-grid">
           {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
+            <PostCard key={post.slug} post={post} locale={locale} />
           ))}
         </div>
       ) : (
-        <p className="empty-state">{emptyMessage}</p>
+        <p className="empty-state">{emptyMessage ?? t.journal.empty}</p>
       )}
 
-      {pagination && <Pagination {...pagination} />}
+      {pagination && <Pagination locale={locale} {...pagination} />}
     </>
   );
 }

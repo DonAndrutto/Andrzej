@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatDate } from "@/lib/format";
+import { localePath, type Locale } from "@/lib/i18n/config";
+import { categoryName, getDictionary } from "@/lib/i18n/dictionary";
 import { firstMarkdownImage } from "@/lib/posts/markdown";
 import type { Post } from "@/lib/posts/types";
 
@@ -11,11 +13,12 @@ import type { Post } from "@/lib/posts/types";
  * explicit featured image (e.g. the author only inserted an inline image in
  * the body) fall back to that first inline image so the card isn't blank.
  */
-export function PostCard({ post }: { post: Post }) {
-  const date = formatDate(post.publishedAt ?? post.updatedAt);
+export function PostCard({ post, locale }: { post: Post; locale: Locale }) {
+  const t = getDictionary(locale);
+  const date = formatDate(post.publishedAt ?? post.updatedAt, locale);
   const thumbnail = post.featuredImage ?? firstMarkdownImage(post.content);
   return (
-    <Link className="post-card" href={`/blog/${post.slug}`}>
+    <Link className="post-card" href={localePath(`/blog/${post.slug}`, locale)}>
       {thumbnail && (
         <span className="post-card-media">
           <Image
@@ -29,7 +32,7 @@ export function PostCard({ post }: { post: Post }) {
         </span>
       )}
       <span className="post-card-body">
-        <span className="card-tag">{post.category}</span>
+        <span className="card-tag">{categoryName(post.category, locale)}</span>
         <span className="card-title">{post.title}</span>
         <span className="card-desc">{post.excerpt}</span>
         <span className="post-meta">
@@ -39,7 +42,7 @@ export function PostCard({ post }: { post: Post }) {
               <span className="sep">·</span>
             </>
           )}
-          {post.readingTimeMinutes} min read
+          {t.journal.minRead(post.readingTimeMinutes)}
         </span>
       </span>
     </Link>
