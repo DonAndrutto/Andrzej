@@ -1,8 +1,18 @@
 import type { MetadataRoute } from "next";
+import { localePath, locales } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 import { getPostRepository } from "@/lib/posts/repository";
 import { absoluteUrl } from "@/lib/site-config";
 
 export const revalidate = 300;
+
+/** One entry per page, written once and emitted for every language edition. */
+interface SitemapPage {
+  path: string;
+  lastModified?: Date;
+  changeFrequency: "weekly" | "monthly";
+  priority: number;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const repo = await getPostRepository();
@@ -17,35 +27,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ? new Date(newestPost.updatedAt)
     : new Date();
 
-  return [
+  const pages: SitemapPage[] = [
+    { path: "/", changeFrequency: "monthly", priority: 1 },
     {
-      url: absoluteUrl("/"),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    {
-      url: absoluteUrl("/blog"),
+      path: "/blog",
       lastModified: blogLastModified,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     ...posts.items.map((post) => ({
-      url: absoluteUrl(`/blog/${post.slug}`),
+      path: `/blog/${post.slug}`,
       lastModified: new Date(post.updatedAt),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
     ...categories.map((category) => ({
-      url: absoluteUrl(`/blog/category/${category.slug}`),
+      path: `/blog/category/${category.slug}`,
       lastModified: blogLastModified,
       changeFrequency: "weekly" as const,
       priority: 0.5,
     })),
     ...tags.map((tag) => ({
-      url: absoluteUrl(`/blog/tag/${tag.slug}`),
+      path: `/blog/tag/${tag.slug}`,
       lastModified: blogLastModified,
       changeFrequency: "weekly" as const,
       priority: 0.4,
     })),
   ];
+
+  // Every entry carries the `hreflang` map of its siblings, so the two
+  // editions of a page are indexed as translations rather than duplicates.
+  return pages.flatMap((page) => {
+    const languages = Object.fromEntries(
+      locales.map((locale) => [
+        getDictionary(locale).htmlLang,
+        absoluteUrl(localePath(page.path, locale)),
+      ]),
+    );
+    return locales.map((locale) => ({
+      url: absoluteUrl(localePath(page.path, locale)),
+      lastModified: page.lastModified,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+      alternates: { languages },
+    }));
+  });
 }

@@ -14,10 +14,10 @@ function firstQuery(q?: string | string[]): string {
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { q } = await searchParams;
-  return searchMetadata("en", firstQuery(q) || undefined);
+  return searchMetadata("pl", firstQuery(q) || undefined);
 }
 
-export default async function SearchPage({ searchParams }: Props) {
+export default async function PolishSearchPage({ searchParams }: Props) {
   const { q } = await searchParams;
-  return <SearchView locale="en" query={firstQuery(q)} />;
+  return <SearchView locale="pl" query={firstQuery(q)} />;
 }

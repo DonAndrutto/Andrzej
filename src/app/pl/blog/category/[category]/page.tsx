@@ -15,10 +15,10 @@ export const generateStaticParams = categoryStaticParams;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category } = await params;
-  return categoryMetadata("en", category);
+  return categoryMetadata("pl", category);
 }
 
-export default async function CategoryPage({ params }: Props) {
+export default async function PolishCategoryPage({ params }: Props) {
   const { category } = await params;
-  return <CategoryView locale="en" category={category} />;
+  return <CategoryView locale="pl" category={category} />;
 }

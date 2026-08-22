@@ -15,10 +15,10 @@ export const generateStaticParams = tagStaticParams;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { tag } = await params;
-  return tagMetadata("en", tag);
+  return tagMetadata("pl", tag);
 }
 
-export default async function TagPage({ params }: Props) {
+export default async function PolishTagPage({ params }: Props) {
   const { tag } = await params;
-  return <TagView locale="en" tag={tag} />;
+  return <TagView locale="pl" tag={tag} />;
 }

@@ -1,24 +1,37 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatDate } from "@/lib/format";
+import { defaultLocale, localePath, type Locale } from "@/lib/i18n/config";
+import { categoryName, getDictionary } from "@/lib/i18n/dictionary";
 import { renderMarkdown } from "@/lib/posts/markdown";
 import { slugify } from "@/lib/posts/slug";
 import type { Post } from "@/lib/posts/types";
 
 /**
- * Full article rendering — shared by the public post page and the admin
- * draft preview so a draft previews exactly as it will publish.
+ * Full article rendering — shared by the public post page (in either
+ * language) and the admin draft preview, so a draft previews exactly as it
+ * will publish. Post bodies are rendered as written; `locale` translates the
+ * chrome around them.
  */
-export function PostArticle({ post }: { post: Post }) {
+export function PostArticle({
+  post,
+  locale = defaultLocale,
+}: {
+  post: Post;
+  locale?: Locale;
+}) {
+  const t = getDictionary(locale);
   const html = renderMarkdown(post.content);
-  const date = formatDate(post.publishedAt ?? post.updatedAt);
+  const date = formatDate(post.publishedAt ?? post.updatedAt, locale);
 
   return (
     <article className="post-page">
       <header className="post-header">
         <p className="dharma-mark">
-          <Link href={`/blog/category/${slugify(post.category)}`}>
-            {post.category}
+          <Link
+            href={localePath(`/blog/category/${slugify(post.category)}`, locale)}
+          >
+            {categoryName(post.category, locale)}
           </Link>
         </p>
         <h1 className="post-title">{post.title}</h1>
@@ -28,7 +41,7 @@ export function PostArticle({ post }: { post: Post }) {
         <p className="post-meta">
           {post.status === "draft" && (
             <>
-              <span className="draft-badge">Draft</span>
+              <span className="draft-badge">{t.journal.draft}</span>
               <span className="sep">·</span>
             </>
           )}
@@ -38,7 +51,7 @@ export function PostArticle({ post }: { post: Post }) {
               <span className="sep">·</span>
             </>
           )}
-          {post.readingTimeMinutes} min read
+          {t.journal.minRead(post.readingTimeMinutes)}
         </p>
       </header>
 
@@ -81,7 +94,10 @@ export function PostArticle({ post }: { post: Post }) {
           <ul className="chip-row">
             {post.tags.map((tag) => (
               <li key={tag}>
-                <Link className="chip" href={`/blog/tag/${slugify(tag)}`}>
+                <Link
+                  className="chip"
+                  href={localePath(`/blog/tag/${slugify(tag)}`, locale)}
+                >
                   {tag}
                 </Link>
               </li>

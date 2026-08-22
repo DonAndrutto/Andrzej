@@ -15,10 +15,10 @@ export const generateStaticParams = journalPagesStaticParams;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { page } = await params;
-  return journalPageMetadata("en", page);
+  return journalPageMetadata("pl", page);
 }
 
-export default async function BlogPagePage({ params }: Props) {
+export default async function PolishBlogPagePage({ params }: Props) {
   const { page } = await params;
-  return <JournalPageView locale="en" page={page} />;
+  return <JournalPageView locale="pl" page={page} />;
 }
