@@ -10,15 +10,18 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink: #1a1410;
+  /* Ink and the two muted greys carry nearly all the running text; the
+     contrast ratios against --paper are noted so the palette can be
+     adjusted without re-measuring it. */
+  --ink: #15100b;        /* 16.7:1 on paper */
   --paper: #f5f0e8;
   --paper-warm: #efe7da;
-  --accent: #7a1010;
+  --accent: #7a1010;     /*  9.7:1 */
   --accent-soft: #a64545;
-  --gold: #a87a2a;
-  --gold-soft: #c9a96a;
-  --muted: #6b5e52;
-  --muted-soft: #7a6b5d;
+  --gold: #8a6017;       /*  4.9:1 — link text ("Open app →"), so AA */
+  --gold-soft: #bd9a55;  /* hairlines and the · separators */
+  --muted: #5c4f43;      /*  7.0:1 — bio, card descriptions, footer */
+  --muted-soft: #6a5b4d; /*  5.8:1 — dates, reading time, captions */
   --card-bg: #fdfaf4;
   --border: #ddd2c2;
   --border-soft: #ebe2d2;
@@ -79,23 +82,23 @@ body::after {
 
 .corner-nav a {
   font-family: var(--sans);
-  font-weight: 300;
-  font-size: 0.68rem;
-  letter-spacing: 0.28em;
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ink);
   text-decoration: none;
   transition: color 0.25s ease, letter-spacing 0.25s ease;
 }
 
-.corner-nav a:hover { color: var(--accent); }
+.corner-nav a:hover { color: var(--accent); letter-spacing: 0.3em; }
 
 /* The language flag: an ornament, not a button — quiet until you reach it. */
 .lang-switch {
   display: inline-flex;
   align-items: center;
   line-height: 0;
-  opacity: 0.55;
+  opacity: 0.7;
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
@@ -507,13 +510,13 @@ footer.site-footer a:hover { border-bottom-color: var(--accent-soft); }
   width: fit-content;
   margin: 0 auto;
   padding: 0.4rem 0;
-  opacity: 0.38;
+  opacity: 0.6;
   transition: opacity 0.3s ease;
 }
 
 .experiments-toggle::-webkit-details-marker { display: none; }
 
-.experiments-toggle:hover { opacity: 0.65; }
+.experiments-toggle:hover { opacity: 0.85; }
 
 .experiments-toggle .exp-label {
   font-family: var(--sans);
@@ -556,7 +559,7 @@ details[open] .experiments-toggle .exp-chevron {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   position: relative;
   overflow: hidden;
-  opacity: 0.75;
+  opacity: 0.88;
 }
 
 .exp-card::before {
@@ -863,7 +866,7 @@ details[open] .experiments-toggle .exp-chevron {
 
 .pagination a:hover { color: var(--accent); letter-spacing: 0.3em; }
 
-.pagination .disabled { opacity: 0.35; }
+.pagination .disabled { opacity: 0.45; }
 
 /* ── Empty state ── */
 .empty-state {
