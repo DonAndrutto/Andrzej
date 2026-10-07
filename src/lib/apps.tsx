@@ -46,6 +46,7 @@ const links = {
   mandalaExplorer: "https://donandrutto.github.io/Mandala-Explorer/",
   parentheses:
     "https://on-collapse-unified-nested-structure-825982397823.us-west1.run.app/",
+  worldSystem: "https://worldsystem.arybszleger.com/",
 } as const;
 
 const en: AppDirectory = {
@@ -110,6 +111,13 @@ const en: AppDirectory = {
     {
       label: "Study Aid",
       apps: [
+        {
+          tag: "Study Aid",
+          title: "World System",
+          description:
+            "An interactive 3D model of the Buddhist world system, after Vasubandhu's Abhidharmakośa and Jamgön Kongtrul's Myriad Worlds: Mount Meru, the seven golden ranges, the four continents and the realms above and below them. Includes the thirty-seven-heap maṇḍala offering, the Game of Rebirth across 104 squares, and the wheel of life as a painted relief. Works offline once added to your home screen.",
+          href: links.worldSystem,
+        },
         {
           tag: "Study Aid",
           title: "Lama Gongdu",
@@ -217,6 +225,13 @@ const pl: AppDirectory = {
     {
       label: "Materiały do nauki",
       apps: [
+        {
+          tag: "Materiały do nauki",
+          title: "System Świata",
+          description:
+            "Interaktywny, trójwymiarowy model buddyjskiego systemu świata według Abhidharmakośi Wasubandhu i „Myriad Worlds” Dziamgöna Kongtrula: góra Meru, siedem złotych pasm, cztery kontynenty oraz sfery powyżej i poniżej nich. Zawiera trzydziestosiedmioczęściowe ofiarowanie mandali, „Grę odrodzenia” na 104 polach i koło życia jako malowaną płaskorzeźbę. Po dodaniu do ekranu głównego działa offline. Dostępny także w języku polskim.",
+          href: links.worldSystem,
+        },
         {
           tag: "Materiały do nauki",
           title: "Lama Gongdu",
