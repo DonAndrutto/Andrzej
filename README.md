@@ -22,6 +22,9 @@ themselves are shown as written — only the frame around them is translated.
 
 ## Develop
 
+Requires **Node.js 24.x** (the version the site is deployed on; `engines` in
+`package.json` enforces it).
+
 ```bash
 npm install
 npm run dev            # http://localhost:3000
@@ -47,6 +50,7 @@ Firebase Storage and Firebase Auth instead.
 | `npm run build`     | Production build              |
 | `npm start`         | Serve the production build    |
 | `npm run typecheck` | TypeScript check              |
+| `npm test`          | Markdown sanitisation tests   |
 
 ## Layout
 
