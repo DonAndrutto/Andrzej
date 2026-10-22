@@ -102,7 +102,9 @@ export function validatePostInput(body: unknown): ValidationResult {
 }
 
 function isSafeImageUrl(url: string): boolean {
-  return url.startsWith("/") || url.startsWith("https://");
+  // Site-relative ("/uploads/…") or https. "//host/…" is protocol-relative —
+  // an off-site URL — and is rejected everywhere else in the markdown pipeline.
+  return (url.startsWith("/") && !url.startsWith("//")) || url.startsWith("https://");
 }
 
 /** Blur placeholders are tiny inline data URIs; cap size to keep docs small. */
