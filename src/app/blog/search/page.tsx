@@ -18,6 +18,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function SearchPage({ searchParams }: Props) {
+  // TEMPORARY (PR #13 runtime verification) — REMOVE BEFORE MERGE. Private log only.
+  console.log(`[runtime-check] search-function node=${process.version}`);
   const { q } = await searchParams;
   return <SearchView locale="en" query={firstQuery(q)} />;
 }
