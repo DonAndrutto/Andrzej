@@ -36,7 +36,6 @@ const links = {
   ewam: "https://donandrutto.github.io/Ewam/",
   ngondro: "https://donandrutto.github.io/Ngondro/",
   kurukulle: "https://studio--studio-187762806-964b0.us-central1.hosted.app",
-  munselDronme: "https://buddhist-text-reader-825982397823.us-west1.run.app/",
   confession:
     "https://studio--confession-companion-whlq9.us-central1.hosted.app",
   bardoOs: "https://bardo-os.arybszleger.com/",
@@ -80,13 +79,6 @@ const en: AppDirectory = {
           description:
             "Practice text for Kurukullé, magnetising deity of the Lotus family.",
           href: links.kurukulle,
-        },
-        {
-          tag: "Sādhana",
-          title: "Münsel Drönme",
-          description:
-            "Polish-language daily sādhana of Münsel Drönme, the Red Chenrezi practice revealed by the Vidyadhara Pema Lingpa.",
-          href: links.munselDronme,
         },
       ],
     },
@@ -201,13 +193,6 @@ const pl: AppDirectory = {
           description:
             "Tekst praktyki Kurukulli, magnetyzującego bóstwa rodziny Lotosu.",
           href: links.kurukulle,
-        },
-        {
-          tag: "Sadhana",
-          title: "Münsel Drönme",
-          description:
-            "Polskojęzyczna codzienna sadhana Münsel Drönme — praktyki Czerwonego Czenrezika odkrytej przez Widjadharę Pema Lingpę.",
-          href: links.munselDronme,
         },
       ],
     },
