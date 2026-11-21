@@ -33,8 +33,8 @@ export interface AppDirectory {
  */
 const links = {
   vajrachedika: "https://vajrachhedika.arybszleger.com/",
-  ewam: "https://donandrutto.github.io/Ewam/",
-  ngondro: "https://donandrutto.github.io/Ngondro/",
+  ewam: "https://ewam.arybszleger.com/",
+  ngondro: "https://ngondro.arybszleger.com/",
   kurukulle: "https://studio--studio-187762806-964b0.us-central1.hosted.app",
   munselDronme: "https://buddhist-text-reader-825982397823.us-west1.run.app/",
   confession:
