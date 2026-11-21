@@ -33,6 +33,7 @@ export interface AppDirectory {
  */
 const links = {
   vajrachedika: "https://vajrachhedika.arybszleger.com/",
+  ewam: "https://donandrutto.github.io/Ewam/",
   ngondro: "https://donandrutto.github.io/Ngondro/",
   kurukulle: "https://studio--studio-187762806-964b0.us-central1.hosted.app",
   munselDronme: "https://buddhist-text-reader-825982397823.us-west1.run.app/",
@@ -92,6 +93,13 @@ const en: AppDirectory = {
     {
       label: "Prayers and Instructions",
       apps: [
+        {
+          tag: "Liturgy",
+          title: "Ewam",
+          description:
+            "Read the E and Wam volumes of the Pema Lingpa liturgies used at Gangteng Monastery, along with the Sangag Choling Prayer Collection. The reader remembers your place in each collection.",
+          href: links.ewam,
+        },
         {
           tag: "Prayers",
           title: "Confession Companion",
@@ -206,6 +214,13 @@ const pl: AppDirectory = {
     {
       label: "Modlitwy i instrukcje",
       apps: [
+        {
+          tag: "Liturgia",
+          title: "Ewam",
+          description:
+            "Dwa tomy liturgii tradycji Pema Lingpy używanych w klasztorze Gangteng (E i Wam) oraz zbiór modlitw Sangag Choling. Czytnik zapamiętuje miejsce lektury w każdym zbiorze.",
+          href: links.ewam,
+        },
         {
           tag: "Modlitwy",
           title: "Towarzysz Wyznania",
