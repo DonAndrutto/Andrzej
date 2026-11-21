@@ -92,7 +92,7 @@ export function PostEditor({
   const setTagsTouched = touch(setTagsText);
 
   function effectiveSlug(): string {
-    return (slugTouched ? slug : slugify(title)) || slugify(title);
+    return (slugTouched ? slugify(slug) : slugify(title)) || slugify(title);
   }
 
   async function save(nextStatus: PostStatus) {
@@ -128,42 +128,50 @@ export function PostEditor({
     const target = currentSlugRef.current
       ? `/api/admin/posts/${currentSlugRef.current}`
       : "/api/admin/posts";
-    const response = await fetch(target, {
-      method: currentSlugRef.current ? "PUT" : "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = (await response.json().catch(() => null)) as {
-      post?: Post;
-      error?: string;
-    } | null;
-    setBusy(false);
+    try {
+      const response = await fetch(target, {
+        method: currentSlugRef.current ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await response.json().catch(() => null)) as {
+        post?: Post;
+        error?: string;
+      } | null;
 
-    if (!response.ok || !data?.post) {
-      setNotice({ kind: "error", text: data?.error ?? "Saving failed." });
-      return;
+      if (!response.ok || !data?.post) {
+        setNotice({ kind: "error", text: data?.error ?? "Saving failed." });
+        return;
+      }
+
+      const saved = data.post;
+      const renamed = currentSlugRef.current && currentSlugRef.current !== saved.slug;
+      const created = !currentSlugRef.current;
+      currentSlugRef.current = saved.slug;
+      setSlug(saved.slug);
+      setSlugTouched(true);
+      setSavedStatus(saved.status);
+      setDirty(false);
+      setNotice({
+        kind: "ok",
+        text:
+          saved.status === "published"
+            ? "Saved and published."
+            : "Draft saved.",
+      });
+
+      if (created || renamed) {
+        router.replace(`/admin/posts/${saved.slug}`);
+      }
+      router.refresh();
+    } catch {
+      setNotice({
+        kind: "error",
+        text: "Network error — saving could not be completed.",
+      });
+    } finally {
+      setBusy(false);
     }
-
-    const saved = data.post;
-    const renamed = currentSlugRef.current && currentSlugRef.current !== saved.slug;
-    const created = !currentSlugRef.current;
-    currentSlugRef.current = saved.slug;
-    setSlug(saved.slug);
-    setSlugTouched(true);
-    setSavedStatus(saved.status);
-    setDirty(false);
-    setNotice({
-      kind: "ok",
-      text:
-        saved.status === "published"
-          ? "Saved and published."
-          : "Draft saved.",
-    });
-
-    if (created || renamed) {
-      router.replace(`/admin/posts/${saved.slug}`);
-    }
-    router.refresh();
   }
 
   async function remove() {
@@ -172,20 +180,28 @@ export function PostEditor({
       return;
     }
     setBusy(true);
-    const response = await fetch(`/api/admin/posts/${currentSlugRef.current}`, {
-      method: "DELETE",
-    });
-    setBusy(false);
-    if (!response.ok) {
-      const data = (await response.json().catch(() => null)) as
-        | { error?: string }
-        | null;
-      setNotice({ kind: "error", text: data?.error ?? "Deleting failed." });
-      return;
+    try {
+      const response = await fetch(`/api/admin/posts/${currentSlugRef.current}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        setNotice({ kind: "error", text: data?.error ?? "Deleting failed." });
+        return;
+      }
+      setDirty(false);
+      router.push("/admin/posts");
+      router.refresh();
+    } catch {
+      setNotice({
+        kind: "error",
+        text: "Network error — deleting failed.",
+      });
+    } finally {
+      setBusy(false);
     }
-    setDirty(false);
-    router.push("/admin/posts");
-    router.refresh();
   }
 
   async function handleFeaturedUpload(file: File) {
@@ -212,9 +228,8 @@ export function PostEditor({
       const image = await uploadImage(file);
       const label = file.name.replace(/\.[a-z0-9]+$/i, "");
       insertBlock(`![${label}](${image.url})`);
-      // If the post has no featured image yet, use this first inline image
-      // as one too — otherwise it shows in the body but not on the journal
-      // listing cards, which only ever read `featuredImage`.
+      // If the post has no featured image yet, promote this first inline image
+      // so the post also carries dimensions and a blur placeholder on cards.
       setFeaturedImage((current) => current ?? { ...image, alt: label });
       setDirty(true);
     } catch (error) {
@@ -309,8 +324,17 @@ export function PostEditor({
               value={slugTouched ? slug : slugify(title)}
               onChange={(e) => {
                 setSlugTouched(true);
-                setSlug(slugify(e.target.value) || e.target.value.toLowerCase());
+                const draft = e.target.value
+                  .toLowerCase()
+                  .replace(/[^a-z0-9-]+/g, "-")
+                  .replace(/-{2,}/g, "-")
+                  .replace(/^-+/, "")
+                  .slice(0, 96);
+                setSlug(draft);
                 setDirty(true);
+              }}
+              onBlur={() => {
+                if (slugTouched) setSlug(slugify(slug));
               }}
               placeholder="url-of-the-post"
             />
@@ -382,7 +406,7 @@ export function PostEditor({
             <button
               type="button"
               className="btn"
-              disabled={uploading !== null}
+              disabled={uploading !== null || !writable}
               onClick={() => inlineFileRef.current?.click()}
             >
               {uploading === "inline" ? "Uploading…" : "Insert image"}
@@ -523,7 +547,7 @@ export function PostEditor({
                 <button
                   type="button"
                   className="btn"
-                  disabled={uploading !== null}
+                  disabled={uploading !== null || !writable}
                   onClick={() => featuredFileRef.current?.click()}
                 >
                   {uploading === "featured" ? "Uploading…" : "Replace"}

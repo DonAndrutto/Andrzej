@@ -1027,7 +1027,6 @@ details[open] .experiments-toggle .exp-chevron {
 .post-body blockquote cite {
   display: block;
   margin-top: 0.5em;
-  font-size: 0.9em;
   font-style: normal;
   font-family: var(--sans);
   font-size: 0.7rem;
@@ -1136,8 +1135,16 @@ details[open] .experiments-toggle .exp-chevron {
 .related-section .post-grid { padding: 0; }
 
 /* ── Responsive ── */
+@media (max-width: 640px) {
+  .post-body table {
+    display: block;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 500px) {
-  header.site-header { padding: 3rem 1.5rem 2rem; }
+  header.site-header { padding: 4.2rem 1.5rem 2rem; }
   .journal-header { padding: 4.2rem 1.5rem 2rem; }
   .corner-nav { right: 1.5rem; top: 1.2rem; }
   .grid { grid-template-columns: 1fr; }

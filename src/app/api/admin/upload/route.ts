@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminSessionOrResponse } from "@/lib/auth/session";
 import { errorResponse } from "@/lib/http-error";
+import { matchesImageSignature } from "@/lib/storage/image-dimensions";
 import {
   ALLOWED_IMAGE_TYPES,
   getImageStorage,
@@ -67,9 +68,17 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const buffer = Buffer.from(await file.arrayBuffer());
+  if (!matchesImageSignature(buffer, file.type)) {
+    return NextResponse.json(
+      { error: "File contents do not match the declared image format." },
+      { status: 415 },
+    );
+  }
+
   try {
     const stored = await storage.save({
-      buffer: Buffer.from(await file.arrayBuffer()),
+      buffer,
       contentType: file.type,
       filename: file.name,
     });

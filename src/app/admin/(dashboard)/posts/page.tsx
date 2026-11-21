@@ -26,11 +26,13 @@ export default async function AdminPostsPage({ searchParams }: Props) {
     perPage: 200,
   });
 
-  const filterHref = (status: string) =>
-    `/admin/posts?${new URLSearchParams({
+  const filterHref = (status: string) => {
+    const qs = new URLSearchParams({
       ...(status !== "all" ? { status } : {}),
       ...(query ? { q: query } : {}),
-    }).toString()}`;
+    }).toString();
+    return qs ? `/admin/posts?${qs}` : "/admin/posts";
+  };
 
   return (
     <>

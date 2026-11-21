@@ -19,7 +19,7 @@
       --gold: #a87a2a;
       --gold-soft: #c9a96a;
       --muted: #6b5e52;
-      --muted-soft: #9d8d7d;
+      --muted-soft: #7a6b5d;
       --card-bg: #fdfaf4;
       --border: #ddd2c2;
       --border-soft: #ebe2d2;
@@ -429,6 +429,13 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      .dharma-mark, h1, .title-rule, .subtitle, .bio, .card {
+        animation-duration: 0.01ms;
+        animation-delay: 0s;
+      }
+    }
+
     /* ── Experiments section ── */
     .experiments-wrapper {
       position: relative;
@@ -633,6 +640,13 @@
 <p class="section-label">Study Aid</p>
 <div class="grid">
 
+  <a class="card" href="https://worldsystem.arybszleger.com/" target="_blank" rel="noopener">
+    <span class="card-tag">Study Aid</span>
+    <span class="card-title">World System</span>
+    <span class="card-desc">An interactive 3D model of the Buddhist world system, after Vasubandhu's Abhidharmakośa and Jamgön Kongtrul's Myriad Worlds: Mount Meru, the seven golden ranges, the four continents and the realms above and below them. Includes the thirty-seven-heap maṇḍala offering, the Game of Rebirth across 104 squares, and the wheel of life as a painted relief. Works offline once added to your home screen.</span>
+    <span class="card-arrow">Open app →</span>
+  </a>
+
   <div class="card card-static">
     <span class="card-tag">Study Aid</span>
     <span class="card-title">Lama Gongdu</span>
@@ -683,7 +697,7 @@
 </div>
 
 <footer>
-  <p>© 2025 Andrzej R. Rybszleger &nbsp;·&nbsp; Translations published by <strong>Yeshe Khorlo</strong>
+  <p>© 2026 Andrzej R. Rybszleger &nbsp;·&nbsp; Translations published by <strong>Yeshe Khorlo</strong>
   &nbsp;·&nbsp; <a href="mailto:translation@arybszleger.com">translation@arybszleger.com</a></p>
 </footer>
 

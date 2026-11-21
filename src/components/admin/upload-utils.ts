@@ -8,18 +8,21 @@ import type { PostImage } from "@/lib/posts/types";
 export async function computeBlurDataURL(file: File): Promise<string | undefined> {
   try {
     const bitmap = await createImageBitmap(file);
-    const scale = 16 / Math.max(bitmap.width, bitmap.height);
-    const width = Math.max(1, Math.round(bitmap.width * scale));
-    const height = Math.max(1, Math.round(bitmap.height * scale));
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d");
-    if (!context) return undefined;
-    context.drawImage(bitmap, 0, 0, width, height);
-    bitmap.close();
-    const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-    return dataUrl.length <= 8_192 ? dataUrl : undefined;
+    try {
+      const scale = 16 / Math.max(bitmap.width, bitmap.height);
+      const width = Math.max(1, Math.round(bitmap.width * scale));
+      const height = Math.max(1, Math.round(bitmap.height * scale));
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext("2d");
+      if (!context) return undefined;
+      context.drawImage(bitmap, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
+      return dataUrl.length <= 8_192 ? dataUrl : undefined;
+    } finally {
+      bitmap.close();
+    }
   } catch {
     return undefined;
   }

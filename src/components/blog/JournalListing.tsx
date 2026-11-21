@@ -21,6 +21,7 @@ export function JournalListing({
   posts,
   categories,
   activeCategory,
+  allActive = false,
   query,
   pagination,
   emptyMessage,
@@ -34,6 +35,7 @@ export function JournalListing({
   posts: Post[];
   categories: Taxonomy[];
   activeCategory?: string;
+  allActive?: boolean;
   query?: string;
   pagination?: { basePath: string; page: number; totalPages: number };
   emptyMessage?: string;
@@ -52,24 +54,27 @@ export function JournalListing({
         {intro && <p className="journal-intro">{intro}</p>}
       </header>
 
-      <JournalToolbar
-        locale={locale}
-        categories={categories}
-        activeCategory={activeCategory}
-        query={query}
-      />
+      <main>
+        <JournalToolbar
+          locale={locale}
+          categories={categories}
+          activeCategory={activeCategory}
+          allActive={allActive}
+          query={query}
+        />
 
-      {posts.length > 0 ? (
-        <div className="post-grid">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} locale={locale} />
-          ))}
-        </div>
-      ) : (
-        <p className="empty-state">{emptyMessage ?? t.journal.empty}</p>
-      )}
+        {posts.length > 0 ? (
+          <div className="post-grid">
+            {posts.map((post) => (
+              <PostCard key={post.slug} post={post} locale={locale} />
+            ))}
+          </div>
+        ) : (
+          <p className="empty-state">{emptyMessage ?? t.journal.empty}</p>
+        )}
 
-      {pagination && <Pagination locale={locale} {...pagination} />}
+        {pagination && <Pagination locale={locale} {...pagination} />}
+      </main>
     </>
   );
 }

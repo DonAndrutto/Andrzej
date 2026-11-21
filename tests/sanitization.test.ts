@@ -329,3 +329,49 @@ describe("resource exhaustion (GHSA-c9rx unbounded recursion class)", () => {
     assert.ok(Date.now() - start < 10_000);
   });
 });
+
+describe("audit hardening regressions", () => {
+  test("jsonLdScript escapes '<' to prevent </script> breakout", async () => {
+    // dictionary.tsx contains JSX and tsconfig uses jsx: "preserve", so tsx
+    // compiles it with React.createElement in Node tests.
+    (globalThis as { React?: unknown }).React = await import("react");
+    const { jsonLdScript } = await import("../src/lib/seo/json-ld");
+    const out = jsonLdScript({
+      headline: "</script><script>alert(1)</script>",
+    });
+    assert.ok(!out.includes("</script>"), "raw </script> must not appear");
+    assert.ok(!out.includes("<"), "raw '<' must be escaped");
+    assert.deepEqual(JSON.parse(out), {
+      headline: "</script><script>alert(1)</script>",
+    });
+  });
+
+  test("matchesImageSignature accepts valid headers and rejects spoofed HTML/SVG", async () => {
+    const { matchesImageSignature } = await import(
+      "../src/lib/storage/image-dimensions"
+    );
+    const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x00]);
+    const jpeg = Buffer.from([0xff, 0xd8, 0xff, 0xe0]);
+    const gif = Buffer.from("GIF89a\x01\x00\x01\x00", "ascii");
+    const webp = Buffer.from("RIFF\x24\x00\x00\x00WEBPVP8 ", "ascii");
+    const avif = Buffer.from("\x00\x00\x00\x14ftypavif\x00\x00\x00\x00", "ascii");
+    const fakeHtml = Buffer.from("<html><script>alert(1)</script></html>", "utf8");
+    const fakeSvg = Buffer.from("<svg onload=alert(1)></svg>", "utf8");
+
+    assert.equal(matchesImageSignature(png, "image/png"), true);
+    assert.equal(matchesImageSignature(jpeg, "image/jpeg"), true);
+    assert.equal(matchesImageSignature(gif, "image/gif"), true);
+    assert.equal(matchesImageSignature(webp, "image/webp"), true);
+    assert.equal(matchesImageSignature(avif, "image/avif"), true);
+
+    assert.equal(matchesImageSignature(fakeHtml, "image/png"), false);
+    assert.equal(matchesImageSignature(fakeSvg, "image/jpeg"), false);
+    assert.equal(matchesImageSignature(png, "image/jpeg"), false);
+  });
+
+  test("slugify folds Polish ł/Ł cleanly", async () => {
+    const { slugify } = await import("../src/lib/posts/slug");
+    assert.equal(slugify("Tłumaczenia z Łodzi"), "tlumaczenia-z-lodzi");
+  });
+});
+

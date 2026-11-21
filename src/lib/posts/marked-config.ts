@@ -43,10 +43,9 @@ const ALLOWED_URL_SCHEMES = new Set(["http:", "https:", "mailto:"]);
 
 /**
  * Rejects `javascript:`/`data:` URIs and protocol-relative ("//host") links
- * at the renderer level, so the client-side preview (which skips the
- * server's sanitize-html pass) can't execute script from pasted or typed
- * markdown. Relative paths (e.g. "/uploads/x.png", "#section") resolve
- * against a placeholder base and are always allowed.
+ * at the renderer level as defense-in-depth alongside `sanitize-html` in
+ * `renderMarkdown()`. Relative paths (e.g. "/uploads/x.png", "#section")
+ * resolve against a placeholder base and are always allowed.
  */
 function isAllowedUrl(url: string): boolean {
   if (url.startsWith("//")) return false;

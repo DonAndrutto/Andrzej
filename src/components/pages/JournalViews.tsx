@@ -66,6 +66,7 @@ export async function JournalIndexView({ locale }: { locale: Locale }) {
         intro={t.journal.description}
         posts={result.items}
         categories={categories}
+        allActive
         pagination={{
           basePath: "/blog",
           page: result.page,
@@ -88,12 +89,24 @@ export async function journalPagesStaticParams() {
   }));
 }
 
-export function journalPageMetadata(locale: Locale, page: string): Metadata {
+export function journalPageMetadata(locale: Locale, pageParam: string): Metadata {
+  const page = Number.parseInt(pageParam, 10);
+  if (!Number.isFinite(page) || page < 2 || String(page) !== pageParam) {
+    return {};
+  }
   const t = getDictionary(locale);
+  const path = `/blog/page/${page}`;
+  const title = `${t.journal.name} — ${t.journal.pageLabel(page)}`;
   return {
-    title: `${t.journal.name} — ${t.journal.pageLabel(Number(page))}`,
+    title,
     description: t.journal.description,
-    alternates: localeAlternates(`/blog/page/${page}`, locale),
+    alternates: localeAlternates(path, locale),
+    openGraph: {
+      title: `${title} — ${siteConfig.author}`,
+      description: t.journal.description,
+      type: "website",
+      ...localeOpenGraph(path, locale),
+    },
   };
 }
 
@@ -139,6 +152,7 @@ export async function JournalPageView({
         intro={t.journal.pageOf(page, result.totalPages)}
         posts={result.items}
         categories={categories}
+        allActive
         pagination={{
           basePath: "/blog",
           page: result.page,
@@ -168,10 +182,19 @@ export async function categoryMetadata(
   );
   if (!taxonomy) return {};
   const name = categoryName(taxonomy.name, locale);
+  const path = `/blog/category/${taxonomy.slug}`;
+  const title = `${name} — ${t.journal.name}`;
+  const description = t.journal.inCategory(name);
   return {
-    title: `${name} — ${t.journal.name}`,
-    description: t.journal.inCategory(name),
-    alternates: localeAlternates(`/blog/category/${taxonomy.slug}`, locale),
+    title,
+    description,
+    alternates: localeAlternates(path, locale),
+    openGraph: {
+      title: `${title} — ${siteConfig.author}`,
+      description,
+      type: "website",
+      ...localeOpenGraph(path, locale),
+    },
   };
 }
 
@@ -239,10 +262,19 @@ export async function tagMetadata(
     (candidate) => candidate.slug === tag,
   );
   if (!taxonomy) return {};
+  const path = `/blog/tag/${taxonomy.slug}`;
+  const title = `${t.journal.taggedTitle(taxonomy.name)} — ${t.journal.name}`;
+  const description = t.journal.taggedWith(taxonomy.name);
   return {
-    title: `${t.journal.taggedTitle(taxonomy.name)} — ${t.journal.name}`,
-    description: t.journal.taggedWith(taxonomy.name),
-    alternates: localeAlternates(`/blog/tag/${taxonomy.slug}`, locale),
+    title,
+    description,
+    alternates: localeAlternates(path, locale),
+    openGraph: {
+      title: `${title} — ${siteConfig.author}`,
+      description,
+      type: "website",
+      ...localeOpenGraph(path, locale),
+    },
   };
 }
 

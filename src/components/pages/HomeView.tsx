@@ -108,44 +108,46 @@ export function HomeView({ locale }: { locale: Locale }) {
         </p>
       </header>
 
-      <p className="bio">{t.home.bio}</p>
+      <main>
+        <p className="bio">{t.home.bio}</p>
 
-      {sections.map((section) => (
-        <section key={section.label} aria-label={section.label}>
-          <DharmaDivider />
-          <h2 className="section-label">{section.label}</h2>
-          <div className="grid">
-            {section.apps.map((app) => (
-              <AppCard key={app.title} app={app} labels={t.home} />
-            ))}
-          </div>
-        </section>
-      ))}
+        {sections.map((section) => (
+          <section key={section.label} aria-label={section.label}>
+            <DharmaDivider />
+            <h2 className="section-label">{section.label}</h2>
+            <div className="grid">
+              {section.apps.map((app) => (
+                <AppCard key={app.title} app={app} labels={t.home} />
+              ))}
+            </div>
+          </section>
+        ))}
 
-      <div className="experiments-wrapper">
-        <details>
-          <summary className="experiments-toggle">
-            <span className="exp-chevron" aria-hidden="true">▶</span>
-            <span className="exp-label">{t.home.experiments}</span>
-          </summary>
-          <div className="experiments-grid">
-            {experiments.map((app) => (
-              <a
-                key={app.title}
-                className="exp-card"
-                href={app.href}
-                target="_blank"
-                rel="noopener"
-              >
-                <span className="card-tag">{app.tag}</span>
-                <span className="card-title">{app.title}</span>
-                <span className="card-desc">{app.description}</span>
-                <span className="card-arrow">{t.home.open}</span>
-              </a>
-            ))}
-          </div>
-        </details>
-      </div>
+        <div className="experiments-wrapper">
+          <details>
+            <summary className="experiments-toggle">
+              <span className="exp-chevron" aria-hidden="true">▶</span>
+              <span className="exp-label">{t.home.experiments}</span>
+            </summary>
+            <div className="experiments-grid">
+              {experiments.map((app) => (
+                <a
+                  key={app.title}
+                  className="exp-card"
+                  href={app.href}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <span className="card-tag">{app.tag}</span>
+                  <span className="card-title">{app.title}</span>
+                  <span className="card-desc">{app.description}</span>
+                  <span className="card-arrow">{t.home.open}</span>
+                </a>
+              ))}
+            </div>
+          </details>
+        </div>
+      </main>
 
       <SiteFooter locale={locale} />
     </>

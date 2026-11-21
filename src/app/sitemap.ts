@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { localePath, locales } from "@/lib/i18n/config";
+import { defaultLocale, localePath, locales } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { getPostRepository } from "@/lib/posts/repository";
 import { absoluteUrl } from "@/lib/site-config";
@@ -58,12 +58,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Every entry carries the `hreflang` map of its siblings, so the two
   // editions of a page are indexed as translations rather than duplicates.
   return pages.flatMap((page) => {
-    const languages = Object.fromEntries(
-      locales.map((locale) => [
-        getDictionary(locale).htmlLang,
-        absoluteUrl(localePath(page.path, locale)),
-      ]),
-    );
+    const languages = {
+      "x-default": absoluteUrl(localePath(page.path, defaultLocale)),
+      ...Object.fromEntries(
+        locales.map((locale) => [
+          getDictionary(locale).htmlLang,
+          absoluteUrl(localePath(page.path, locale)),
+        ]),
+      ),
+    };
     return locales.map((locale) => ({
       url: absoluteUrl(localePath(page.path, locale)),
       lastModified: page.lastModified,

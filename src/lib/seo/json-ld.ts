@@ -140,7 +140,10 @@ export function breadcrumbJsonLd(
   };
 }
 
-/** Serialise one or more JSON-LD objects for a <script> tag. */
+/** Serialise one or more JSON-LD objects for a <script> tag safely. */
 export function jsonLdScript(...objects: object[]): string {
-  return JSON.stringify(objects.length === 1 ? objects[0] : objects);
+  return JSON.stringify(objects.length === 1 ? objects[0] : objects).replace(
+    /</g,
+    "\\u003c",
+  );
 }

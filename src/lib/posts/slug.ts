@@ -5,6 +5,7 @@
  */
 export function slugify(input: string): string {
   return input
+    .replace(/[łŁ]/g, "l")
     .normalize("NFKD")
     .replace(/[̀-ͯ]/g, "") // strip combining marks
     .toLowerCase()

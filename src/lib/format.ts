@@ -6,11 +6,13 @@ const dateFormatters: Record<Locale, Intl.DateTimeFormat> = {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   }),
   pl: new Intl.DateTimeFormat("pl-PL", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "UTC",
   }),
 };
 

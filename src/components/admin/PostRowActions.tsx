@@ -19,22 +19,27 @@ export function PostRowActions({
 
   async function toggleStatus() {
     setBusy(true);
-    const response = await fetch(`/api/admin/posts/${slug}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: status === "published" ? "draft" : "published",
-      }),
-    });
-    setBusy(false);
-    if (!response.ok) {
-      const data = (await response.json().catch(() => null)) as
-        | { error?: string }
-        | null;
-      window.alert(data?.error ?? "The status change failed.");
-      return;
+    try {
+      const response = await fetch(`/api/admin/posts/${slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          status: status === "published" ? "draft" : "published",
+        }),
+      });
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        window.alert(data?.error ?? "The status change failed.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      window.alert("Network error — the status change could not be completed.");
+    } finally {
+      setBusy(false);
     }
-    router.refresh();
   }
 
   async function remove() {
@@ -46,18 +51,23 @@ export function PostRowActions({
       return;
     }
     setBusy(true);
-    const response = await fetch(`/api/admin/posts/${slug}`, {
-      method: "DELETE",
-    });
-    setBusy(false);
-    if (!response.ok) {
-      const data = (await response.json().catch(() => null)) as
-        | { error?: string }
-        | null;
-      window.alert(data?.error ?? "Deleting failed.");
-      return;
+    try {
+      const response = await fetch(`/api/admin/posts/${slug}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        window.alert(data?.error ?? "Deleting failed.");
+        return;
+      }
+      router.refresh();
+    } catch {
+      window.alert("Network error — deleting failed.");
+    } finally {
+      setBusy(false);
     }
-    router.refresh();
   }
 
   return (

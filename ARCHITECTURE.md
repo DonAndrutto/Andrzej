@@ -114,11 +114,13 @@ root layout would opt the whole site out of static generation.
   imported dynamically only on the login page.
 - **Typography** via `next/font` (Cormorant Garamond, Josefin Sans):
   self-hosted, preloaded, no render-blocking font CSS.
-- **Images** via `next/image` (AVIF/WebP, responsive `sizes`, lazy loading);
-  blur placeholders are tiny data-URIs computed in the author's browser at
-  upload time — no native image libraries server-side. Intrinsic dimensions
-  are sniffed server-side (`src/lib/storage/image-dimensions.ts`) so layout
-  never shifts.
+- **Images** via `next/image` (with `unoptimized: true` so images load
+  directly from Firebase Storage / `public/uploads/` without hitting Vercel
+  Hobby image-optimization quotas, while keeping lazy loading and layout
+  stability); blur placeholders are tiny data-URIs computed in the author's
+  browser at upload time — no native image libraries server-side. Intrinsic
+  dimensions are sniffed server-side (`src/lib/storage/image-dimensions.ts`)
+  so layout never shifts.
 - **Route-level code splitting** falls out of the App Router; the shared
   first-load JS stays ≈100 kB and admin-only code never reaches readers.
 

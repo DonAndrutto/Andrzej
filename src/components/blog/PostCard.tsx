@@ -8,10 +8,10 @@ import type { Post } from "@/lib/posts/types";
 
 /**
  * Journal card — the blog counterpart of the home page app card. The featured
- * image is optimised by next/image (AVIF/WebP, responsive sizes), lazy-loaded
- * and blurred-in when the post stores a placeholder. Posts saved without an
- * explicit featured image (e.g. the author only inserted an inline image in
- * the body) fall back to that first inline image so the card isn't blank.
+ * image is rendered via next/image (lazy-loaded and blurred-in when the post
+ * stores a placeholder). Posts saved without an explicit featured image (e.g.
+ * the author only inserted an inline image in the body) fall back to that
+ * first inline image so the card isn't blank.
  */
 export function PostCard({ post, locale }: { post: Post; locale: Locale }) {
   const t = getDictionary(locale);

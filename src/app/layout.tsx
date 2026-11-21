@@ -10,7 +10,6 @@ import "./globals.css";
  */
 const serif = Cormorant_Garamond({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "600"],
   style: ["normal", "italic"],
   variable: "--font-serif",
   display: "swap",
@@ -19,7 +18,6 @@ const serif = Cormorant_Garamond({
 
 const sans = Josefin_Sans({
   subsets: ["latin", "latin-ext"],
-  weight: ["300", "400"],
   variable: "--font-sans",
   display: "swap",
   fallback: ["sans-serif"],

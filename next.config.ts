@@ -19,7 +19,6 @@ const nextConfig: NextConfig = {
     // Firebase Storage (long-cached, CDN-served) with no optimizer in the
     // path. Blur placeholders, sizing and layout are unaffected.
     unoptimized: true,
-    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       // Firebase Storage download URLs (used once Firebase is configured).
       { protocol: "https", hostname: "firebasestorage.googleapis.com" },
@@ -29,6 +28,18 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Frame-Options", value: "DENY" },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
       {
         source: "/uploads/:path*",
         headers: [

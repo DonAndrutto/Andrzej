@@ -115,24 +115,26 @@ export async function PostView({
       />
 
       <CornerNav current="journal" locale={locale} path={`/blog/${post.slug}`} />
-      <Breadcrumbs items={breadcrumbs} locale={locale} />
-      <PostArticle post={post} locale={locale} />
+      <main>
+        <Breadcrumbs items={breadcrumbs} locale={locale} />
+        <PostArticle post={post} locale={locale} />
 
-      {related.length > 0 && (
-        <section className="related-section" aria-label={t.journal.furtherReading}>
-          <DharmaDivider />
-          <h2 className="section-label">{t.journal.furtherReading}</h2>
-          <div className="post-grid">
-            {related.map((relatedPost) => (
-              <PostCard
-                key={relatedPost.slug}
-                post={relatedPost}
-                locale={locale}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+        {related.length > 0 && (
+          <section className="related-section" aria-label={t.journal.furtherReading}>
+            <DharmaDivider />
+            <h2 className="section-label">{t.journal.furtherReading}</h2>
+            <div className="post-grid">
+              {related.map((relatedPost) => (
+                <PostCard
+                  key={relatedPost.slug}
+                  post={relatedPost}
+                  locale={locale}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
     </>
   );
 }

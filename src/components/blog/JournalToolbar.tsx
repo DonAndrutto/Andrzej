@@ -12,11 +12,13 @@ export function JournalToolbar({
   locale,
   categories,
   activeCategory,
+  allActive = false,
   query,
 }: {
   locale: Locale;
   categories: Taxonomy[];
   activeCategory?: string;
+  allActive?: boolean;
   query?: string;
 }) {
   const t = getDictionary(locale);
@@ -41,7 +43,7 @@ export function JournalToolbar({
           <li>
             <Link
               href={localePath("/blog", locale)}
-              className={`chip${activeCategory ? "" : " chip-active"}`}
+              className={`chip${allActive && !activeCategory ? " chip-active" : ""}`}
             >
               {t.journal.all}
             </Link>
