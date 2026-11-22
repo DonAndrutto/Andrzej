@@ -42,7 +42,7 @@ const links = {
   bardoOs: "https://bardo-os.arybszleger.com/",
   lamaGongdu: "https://lama-gongdu.arybszleger.com/",
   lamaGongduPurchase: "https://taplink.cc/yeshekhorlo",
-  yontenDzo: "https://donandrutto.github.io/Yontendzo/",
+  yontenDzo: "https://yontendzo.arybszleger.com/",
   tibetanReading: "https://donandrutto.github.io/TibReading/",
   mandalaExplorer: "https://donandrutto.github.io/Mandala-Explorer/",
   parentheses:
