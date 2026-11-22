@@ -3,6 +3,7 @@ import { getAppDirectory, links, type AppEntry } from "@/lib/apps";
 import type { Locale } from "@/lib/i18n/config";
 import { siteConfig } from "@/lib/site-config";
 import { ExperimentDrawer } from "./ExperimentDrawer";
+import { libraryRelease } from "./release";
 import { InstallLibrary } from "./InstallLibrary";
 import { LibraryUpdate } from "./LibraryUpdate";
 import { Tile } from "./Tile";
@@ -34,7 +35,7 @@ export function launcherMetadata(locale: Locale): Metadata {
   };
 }
 
-export function Launcher({ locale }: { locale: Locale }) {
+export async function Launcher({ locale }: { locale: Locale }) {
   const { sections, experiments } = getAppDirectory(locale);
   const t = words[locale];
   const polish = locale === "pl";
@@ -50,7 +51,7 @@ export function Launcher({ locale }: { locale: Locale }) {
       <div className={styles.grid}>{experiments.map(app => tile(app))}</div>
     </section>
   }>
-    <div className={styles.inner}>
+    <div className={styles.inner} data-library-release={await libraryRelease()}>
       <header className={styles.top}>
         <a className={styles.author} href={website + "/"}><img src="/icon.svg" alt="" width="26" height="26" />{siteConfig.author}</a>
         <nav aria-label={polish ? "Język" : "Language"}>{(["en", "pl"] as const).map(lang =>

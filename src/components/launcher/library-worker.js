@@ -1,5 +1,6 @@
 const prefix = "app-library-";
-const release = prefix + "__RELEASE__";
+const version = "__RELEASE__";
+const release = prefix + version;
 const pages = ["/", "/pl"];
 const artwork = "/library-app/";
 const local = path => new URL(path, self.location.origin).href;
@@ -15,10 +16,14 @@ async function saveLibrary() {
     // Collect resources from both rendered editions. This includes the hidden
     // experiment tiles and the exact script URLs served for this deployment.
     for (const path of pages) {
-      const response = await fetch(fresh(local(path)));
+      // A CDN can briefly serve different deployments at the same URL.
+      // Keep the working cache until both languages match this worker.
+      const page = new URL(local(path));
+      page.searchParams.set("library-release", version);
+      const response = await fetch(fresh(page));
       if (!response.ok) throw Error("Library page unavailable");
       const html = await response.clone().text();
-      if (!html.includes('id="experimental-apps"')) throw Error("Unexpected library page");
+      if (!html.includes(`data-library-release="${version}"`)) throw Error("Library release mismatch");
       for (const match of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
         const url = new URL(match[1].replaceAll("&amp;", "&"), local(path));
         if (url.origin === self.location.origin && /^\/(?:_next\/static\/|launcher-icons\/|library-app\/|icon\.svg$)/.test(url.pathname)) {
