@@ -39,6 +39,7 @@ export const links = {
   munselDronme: "https://munsel-dronme.arybszleger.com/",
   confession:
     "https://confession.arybszleger.com/",
+  mantras: "https://mantras.arybszleger.com/",
   bardoOs: "https://bardo-os.arybszleger.com/",
   lamaGongdu: "https://lama-gongdu.arybszleger.com/",
   lamaGongduPurchase: "https://taplink.cc/yeshekhorlo",
@@ -106,6 +107,13 @@ const en: AppDirectory = {
           description:
             "Tibetan, English and Polish renderings of three popular confession texts within the Tibetan tradition: the Vajrayāna Downfall Confession, the Bodhisattva's Confession, and Yeshe Kuchok — the Ultimate Confession.",
           href: links.confession,
+        },
+        {
+          tag: "Mantras",
+          title: "Mantras Visualised",
+          description:
+            "Follow a rotating garland of Tibetan syllables around a mantra’s seed syllable. Choose a practice, set your recitation pace and count repetitions.",
+          href: links.mantras,
         },
         {
           tag: "Prayers and Instructions",
@@ -227,6 +235,13 @@ const pl: AppDirectory = {
           description:
             "Tybetańskie, angielskie i polskie wersje trzech popularnych tekstów oczyszczenia i wyznania przewinień w tradycji tybetańskiej: Wyznania Upadków Wadżrajany, Wyznania Bodhisattwy oraz Jeshe Kuciok — Ostatecznego Wyznania. Zawiera język polski.",
           href: links.confession,
+        },
+        {
+          tag: "Mantry",
+          title: "Wizualizacje mantr",
+          description:
+            "Śledź wzrokiem girlandę tybetańskich sylab wirującą wokół sylaby nasiennej mantry. Wybierz praktykę, ustaw tempo recytacji i licz powtórzenia.",
+          href: links.mantras,
         },
         {
           tag: "Modlitwy i instrukcje",

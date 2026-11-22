@@ -6,6 +6,7 @@ export const notes: Record<string, [string, string]> = {
   munselDronme: ["A daily Chenrezi practice with Tibetan text, phonetics and a Polish translation.", "Codzienna praktyka Czenrezika z tekstem tybetańskim, zapisem fonetycznym i polskim przekładem."],
   ewam: ["Browse the E and Wam liturgies and the Sangag Choling prayer collection.", "Liturgie E i Wam oraz zbiór modlitw klasztoru Sangag Choling."],
   confession: ["Three Tibetan confession prayers with English and Polish translations.", "Trzy tybetańskie modlitwy wyznania z polskim i angielskim przekładem."],
+  mantras: ["Follow a rotating mantra garland at your own recitation pace.", "Śledź wirującą girlandę mantry w rytmie swojej recytacji."],
   bardoOs: ["Prayers and instructions from the Bardo Thödrol for those preparing for death and those at their bedside.", "Modlitwy i wskazówki z Bardo Thödrol dla osób przygotowujących się do śmierci i ich bliskich."],
   worldSystem: ["Explore Mount Meru, the continents and the realms of Buddhist cosmology in 3D.", "Odkrywaj górę Meru, kontynenty i światy kosmologii buddyjskiej w trzech wymiarach."],
   lamaGongdu: ["Explore Sangye Lingpa’s Lama Gongdu cycle and its dream yoga instructions.", "Poznaj cykl Lama Gongdu Sangje Lingpy i zawarte w nim instrukcje jogi snu."],

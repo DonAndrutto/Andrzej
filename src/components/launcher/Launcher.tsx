@@ -18,6 +18,7 @@ const words = {
   pl: { title: "Biblioteka aplikacji", description: "Teksty buddyzmu tybetańskiego do praktyki i studiowania.", journal: "Dziennik", experiments: "Eksperymenty" },
 };
 const shortNames: Record<string, [string, string]> = {
+  [links.mantras]: ["Mantras", "Mantry"],
   [links.yontenDzo]: ["Yönten Dzö", "Yönten Dzö"],
   [links.tibetanReading]: ["Tibetan Primer", "Elementarz tybetański"],
 };
