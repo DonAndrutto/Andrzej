@@ -44,7 +44,7 @@ const links = {
   lamaGongduPurchase: "https://taplink.cc/yeshekhorlo",
   yontenDzo: "https://yontendzo.arybszleger.com/",
   tibetanReading: "https://donandrutto.github.io/TibReading/",
-  mandalaExplorer: "https://donandrutto.github.io/Mandala-Explorer/",
+  mandalaExplorer: "https://mandala.arybszleger.com/",
   parentheses:
     "https://parentheses.arybszleger.com/",
   worldSystem: "https://worldsystem.arybszleger.com/",
