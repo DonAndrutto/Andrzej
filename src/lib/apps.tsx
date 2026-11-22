@@ -39,7 +39,7 @@ const links = {
   confession:
     "https://confession.arybszleger.com/",
   bardoOs: "https://bardo-os.arybszleger.com/",
-  lamaGongdu: "https://lama-gongdu-cycle-930326859786.us-west1.run.app",
+  lamaGongdu: "https://lama-gongdu.arybszleger.com/",
   lamaGongduPurchase: "https://taplink.cc/yeshekhorlo",
   yontenDzo: "https://donandrutto.github.io/Yontendzo/",
   tibetanReading: "https://donandrutto.github.io/TibReading/",
