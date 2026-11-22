@@ -45,7 +45,7 @@ const links = {
   tibetanReading: "https://donandrutto.github.io/TibReading/",
   mandalaExplorer: "https://donandrutto.github.io/Mandala-Explorer/",
   parentheses:
-    "https://on-collapse-unified-nested-structure-825982397823.us-west1.run.app/",
+    "https://parentheses.arybszleger.com/",
   worldSystem: "https://worldsystem.arybszleger.com/",
 } as const;
 
