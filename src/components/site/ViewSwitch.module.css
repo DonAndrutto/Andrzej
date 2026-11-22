@@ -1,21 +1,28 @@
 .switcher {
   display: inline-flex;
   vertical-align: middle;
-  padding: 3px;
-  margin-top: 15px;
-  border: 1px solid #c7b8a3;
-  border-radius: 24px;
-  background: #f6f1e8ed;
-  font: 500 13px/1 var(--sans);
+  margin-top: 6px;
 }
+
 .switcher a {
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  min-height: 32px; padding: 1px 12px 0;
-  border-radius: 18px; text-decoration: none; color: #645246;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 4px;
+  color: var(--muted);
+  font: 400 13px/1.25 var(--sans);
+  text-decoration: none;
 }
-.switcher a[aria-current] { background: #713638; color: #fff7e7; }
-.switcher a:not([aria-current]):hover { background: #eae0d3; }
-.switcher a:focus-visible { outline: 2px solid #67332e; outline-offset: 2px; }
-.switcher i { display: inline-block; width: 12px; height: 12px; }
-.list { background: repeating-linear-gradient(to bottom, currentColor 0 2px, transparent 2px 5px); }
-.squares { background: conic-gradient(currentColor 25%, transparent 0) 0 0/8px 8px; background-position: -4px 0; }
+
+.switcher a:hover,
+.switcher a:focus-visible {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.switcher a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
