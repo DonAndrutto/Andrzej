@@ -66,8 +66,11 @@
   content: "";
   z-index: -1;
   position: absolute;
-  inset: 0 0 0 18%;
-  background: url("/library-mountains.webp") right center / cover no-repeat;
+  inset: 0 0 0 auto;
+  height: 100%;
+  aspect-ratio: 3;
+  max-width: 100%;
+  background: url("/library-app/gangtey.webp") right center / cover no-repeat;
   mix-blend-mode: multiply;
   mask-image: linear-gradient(to right, transparent 0%, #000 48%);
   opacity: .8;
@@ -93,6 +96,8 @@
   padding: clamp(34px, 5.6vh, 62px) 0 28px;
 }
 .tile {
+  -webkit-touch-callout: none;
+  user-select: none;
   color: #382f29;
   text-decoration: none;
   display: flex;
@@ -138,8 +143,8 @@
 @media (max-width: 760px) {
   .inner, .experiments { width: calc(100% - 40px); }
   .top { height: 63px; }
-  .hero { min-height: 163px; }
-  .hero::before { inset-inline-start: 12%; opacity: .6; mask-image: linear-gradient(to right, transparent 12%, #000 75%); }
+  .hero { min-height: 198px; }
+  .hero::before { max-width: 100%; opacity: .6; mask-image: linear-gradient(to right, transparent 12%, #000 75%); }
   .hero h1 { font-size: clamp(44px, 8vw, 62px); }
   .hero p { max-width: 18em; font-size: 13px; }
   .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 29px 6px; }
@@ -151,3 +156,18 @@
   .tile { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) { .tile img { transition: none; } }
+
+.tip {
+  position: fixed;
+  z-index: 6;
+  width: min(236px, calc(100vw - 24px));
+  padding: 12px 15px;
+  background: #fffaf0;
+  border: 1px solid #c8b597;
+  border-radius: 9px;
+  box-shadow: 0 5px 18px #3e282425;
+  color: #44342d;
+  text-align: left;
+  font: 500 14px/1.45 var(--sans);
+}
+.tip::before { content: ""; position: absolute; inset: -6px 0; }

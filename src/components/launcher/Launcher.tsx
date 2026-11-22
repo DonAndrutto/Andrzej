@@ -3,6 +3,9 @@ import { getAppDirectory, links, type AppEntry } from "@/lib/apps";
 import type { Locale } from "@/lib/i18n/config";
 import { siteConfig } from "@/lib/site-config";
 import { ExperimentDrawer } from "./ExperimentDrawer";
+import { Tile } from "./Tile";
+import { notes } from "./notes";
+import { ViewSwitch } from "@/components/site/ViewSwitch";
 import styles from "./launcher.module.css";
 
 const origin = "https://app.arybszleger.com";
@@ -20,9 +23,12 @@ const iconByLink = new Map(Object.entries(links).map(([key, url]) => [String(url
 export function launcherMetadata(locale: Locale): Metadata {
   const { title, description } = words[locale];
   return {
-    title, description,
+    title, description, applicationName: title,
+    manifest: `/library-app/${locale}/manifest.webmanifest`,
+    appleWebApp: { capable: true, title, statusBarStyle: "default" },
+    icons: { icon: "/library-app/icon.svg", apple: "/library-app/icon-180.png" },
     alternates: { canonical: addresses[locale], languages: addresses },
-    openGraph: { title, description, url: addresses[locale], images: [origin + "/library-mountains.webp"] },
+    openGraph: { title, description, url: addresses[locale], images: [origin + "/library-app/gangtey.webp"] },
   };
 }
 
@@ -32,10 +38,9 @@ export function Launcher({ locale }: { locale: Locale }) {
   const polish = locale === "pl";
   const website = "https://www.arybszleger.com" + (polish ? "/pl" : "");
   function tile({ href, title }: Pick<AppEntry, "href" | "title">, icon = iconByLink.get(href)) {
-    return <a className={styles.tile} href={href} key={href} title={title}>
-      <img src={`/launcher-icons/${icon}.png`} width="84" height="84" alt="" />
-      <span>{shortNames[href]?.[polish ? 1 : 0] ?? title}</span>
-    </a>;
+    return <Tile key={href} href={href} icon={icon!}
+      label={shortNames[href]?.[polish ? 1 : 0] ?? title}
+      description={notes[icon!][polish ? 1 : 0]} />;
   }
   return <ExperimentDrawer locale={locale} experiments={
     <section className={styles.experiments} aria-labelledby="experiment-title">
@@ -52,7 +57,7 @@ export function Launcher({ locale }: { locale: Locale }) {
       </header>
       <div className={styles.hero}>
         <div><h1>{polish ? <>Biblioteka <em>aplikacji</em></> : <>App <em>Library</em></>}</h1>
-        <p>{t.description}</p></div>
+        <p>{t.description}</p><ViewSwitch locale={locale} app /></div>
       </div>
       <div className={styles.grid}>
         {sections.flatMap(section => section.apps.map(app => tile(app)))}

@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import type { Metadata } from "next";
+import { ViewSwitch } from "@/components/site/ViewSwitch";
 import { CornerNav } from "@/components/site/CornerNav";
 import { DharmaDivider } from "@/components/site/DharmaDivider";
 import { SiteFooter } from "@/components/site/SiteFooter";
@@ -106,6 +107,7 @@ export function HomeView({ locale }: { locale: Locale }) {
             </Fragment>
           ))}
         </p>
+        <ViewSwitch locale={locale} app={false} />
       </header>
 
       <main>
