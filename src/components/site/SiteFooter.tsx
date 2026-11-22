@@ -15,6 +15,9 @@ export function SiteFooter({ locale }: { locale: Locale }) {
       <p className="footer-nav">
         <Link href={localePath("/", locale)}>{t.footer.home}</Link>
         <Link href={localePath("/blog", locale)}>{t.footer.journal}</Link>
+        <a href={locale === "pl" ? "https://app.arybszleger.com/pl" : "https://app.arybszleger.com/"}>
+          {locale === "pl" ? "Biblioteka aplikacji" : "App Library"}
+        </a>
         <Link href="/feed.xml">RSS</Link>
       </p>
     </footer>

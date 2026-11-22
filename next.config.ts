@@ -26,6 +26,17 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.googleusercontent.com" },
     ],
   },
+  async rewrites() {
+    const host = [{ type: "host" as const, value: "app\\.arybszleger\\.com" }];
+    return {
+      beforeFiles: [
+        { source: "/", has: host, destination: "/library" },
+        { source: "/pl", has: host, destination: "/pl/library" },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   async headers() {
     return [
       {

@@ -31,7 +31,7 @@ export interface AppDirectory {
  * so a moved URL can never be updated in one language and forgotten in the
  * other.
  */
-const links = {
+export const links = {
   vajrachedika: "https://vajrachhedika.arybszleger.com/",
   ewam: "https://ewam.arybszleger.com/",
   ngondro: "https://ngondro.arybszleger.com/",
