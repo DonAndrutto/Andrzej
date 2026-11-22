@@ -35,7 +35,7 @@ const links = {
   vajrachedika: "https://vajrachhedika.arybszleger.com/",
   ewam: "https://ewam.arybszleger.com/",
   ngondro: "https://ngondro.arybszleger.com/",
-  kurukulle: "https://studio--studio-187762806-964b0.us-central1.hosted.app",
+  kurukulle: "https://kurukulle.arybszleger.com/",
   confession:
     "https://studio--confession-companion-whlq9.us-central1.hosted.app",
   bardoOs: "https://bardo-os.arybszleger.com/",
