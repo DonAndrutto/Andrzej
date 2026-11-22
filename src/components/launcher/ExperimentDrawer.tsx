@@ -10,12 +10,6 @@ export function ExperimentDrawer({ children, experiments, locale }: { children: 
   const focusOnOpen = useRef(false);
 
   useEffect(() => {
-    if (location.hostname === "app.arybszleger.com" && "serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/library-sw.js").catch(error => console.warn("Offline library unavailable", error));
-    }
-  }, []);
-
-  useEffect(() => {
     const el = scroll.current;
     if (!el || open) return;
     const bottom = () => el.scrollHeight - el.clientHeight - el.scrollTop < 4;

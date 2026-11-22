@@ -3,6 +3,8 @@ import { getAppDirectory, links, type AppEntry } from "@/lib/apps";
 import type { Locale } from "@/lib/i18n/config";
 import { siteConfig } from "@/lib/site-config";
 import { ExperimentDrawer } from "./ExperimentDrawer";
+import { InstallLibrary } from "./InstallLibrary";
+import { LibraryUpdate } from "./LibraryUpdate";
 import { Tile } from "./Tile";
 import { notes } from "./notes";
 import { ViewSwitch } from "@/components/site/ViewSwitch";
@@ -57,8 +59,11 @@ export function Launcher({ locale }: { locale: Locale }) {
       </header>
       <div className={styles.hero}>
         <div><h1>{polish ? <>Biblioteka <em>aplikacji</em></> : <>App <em>Library</em></>}</h1>
-        <p>{t.description}</p><ViewSwitch locale={locale} app /></div>
+        <p>{t.description}</p>
+          <div className={styles.actions}><ViewSwitch locale={locale} app /><InstallLibrary locale={locale} /></div>
+        </div>
       </div>
+      <LibraryUpdate locale={locale} />
       <div className={styles.grid}>
         {sections.flatMap(section => section.apps.map(app => tile(app)))}
         {tile({ title: t.journal, href: website + "/blog" }, "journal")}

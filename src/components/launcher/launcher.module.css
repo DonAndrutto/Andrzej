@@ -171,3 +171,43 @@
   font: 500 14px/1.45 var(--sans);
 }
 .tip::before { content: ""; position: absolute; inset: -6px 0; }
+
+.actions {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin-top: 15px;
+}
+.actions nav { margin-top: 0; }
+.install {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 40px; padding: 0 4px; border: 0;
+  background: transparent; color: #694736; cursor: pointer;
+  font: 500 13px/1 var(--sans);
+}
+.install:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (display-mode: standalone) { .install { display: none; } }
+.installGuide {
+  margin: auto; width: min(365px, calc(100vw - 32px)); max-height: 88dvh;
+  padding: 26px; border: 1px solid #c8b597; border-radius: 17px;
+  background: #fcf7ed; color: #3b3029; box-shadow: 0 14px 50px #30241c38;
+  font: 400 15px/1.55 var(--sans);
+}
+.installGuide::backdrop { background: #30291f60; }
+.installGuide img { border-radius: 12px; }
+.installGuide h2 { margin: 8px 0 14px; font: 500 32px/1.05 var(--serif); }
+.installGuide ol { padding-left: 1.4em; }
+.installGuide li + li { margin-top: 9px; }
+.installGuide form { margin-top: 20px; text-align: right; }
+.installGuide button, .update button {
+  padding: 9px 14px; border-radius: 18px; border: 1px solid #c7b8a3;
+  background: transparent; color: #654539; font: 500 14px var(--sans); cursor: pointer;
+}
+.update {
+  position: fixed; z-index: 10; bottom: max(18px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: calc(100vw - 28px);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 18px;
+  padding: 12px 15px; border-radius: 15px; border: 1px solid #c8b597; box-shadow: 0 4px 22px #30241c30;
+  background: #fff9ee; color: #46362c; font: 500 15px/1.4 var(--sans);
+}
+.update div { display: flex; align-items: center; gap: 6px; }
+.update button { border-color: transparent; }
+.update .apply, .installGuide button { color: #fff7e7; background: #713638; border-color: #713638; }

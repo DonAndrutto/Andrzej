@@ -44,7 +44,18 @@ async function saveLibrary() {
   }
 }
 
-self.addEventListener("install", event => event.waitUntil(saveLibrary()));
+self.addEventListener("install", event => {
+  event.waitUntil((async () => {
+    await saveLibrary();
+    // The original UUID-versioned library has no update button. Take over
+    // that release so its next navigation works even with another tab open.
+    const legacy = /^app-library-[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/;
+    if ((await caches.keys()).some(key => legacy.test(key))) await self.skipWaiting();
+  })());
+});
+self.addEventListener("message", event => {
+  if (event.data === "APPLY_LIBRARY_UPDATE") event.waitUntil(self.skipWaiting());
+});
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
     for (const key of await caches.keys()) {
