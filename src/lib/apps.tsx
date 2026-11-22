@@ -37,7 +37,7 @@ const links = {
   ngondro: "https://ngondro.arybszleger.com/",
   kurukulle: "https://kurukulle.arybszleger.com/",
   confession:
-    "https://studio--confession-companion-whlq9.us-central1.hosted.app",
+    "https://confession.arybszleger.com/",
   bardoOs: "https://bardo-os.arybszleger.com/",
   lamaGongdu: "https://lama-gongdu-cycle-930326859786.us-west1.run.app",
   lamaGongduPurchase: "https://taplink.cc/yeshekhorlo",
